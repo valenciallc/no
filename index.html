@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>فالنسيا للرخام - نظام الموارد البشرية المتكامل | تقارير شهرية وتنبيهات تليجرام تلقائية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: #f0f2f8;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e2a3a 0%, #0f1a24 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 28px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .company-name {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .company-name span {
+            color: #d4af37;
+        }
+
+        .sub {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-top: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 24px;
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-card i {
+            font-size: 38px;
+            color: #c8902d;
+            margin-bottom: 12px;
+        }
+
+        .stat-card h4 {
+            font-size: 15px;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 34px;
+            font-weight: 800;
+            color: #1e2a3a;
+        }
+
+        .section {
+            background: white;
+            border-radius: 28px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #c8902d;
+            border-right: 5px solid #c8902d;
+            padding-right: 18px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            background: #f8f9fc;
+            padding: 15px;
+            border-radius: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 5px 15px;
+            border-radius: 40px;
+            border: 1px solid #e2e6ea;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+        }
+
+        select, input, button {
+            padding: 10px 16px;
+            border-radius: 40px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            background: white;
+        }
+
+        button {
+            background: #c8902d;
+            color: white;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #a06e20;
+            transform: scale(0.97);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
+        }
+
+        th {
+            background: #1e2a3a;
+            color: white;
+            padding: 14px 10px;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #eceef2;
+            text-align: center;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-renew { background: #e3f7ec; color: #2b7e3a; }
+        .badge-leave { background: #fff3e0; color: #c47b2e; }
+        .badge-termination { background: #ffe6e5; color: #c23d2b; }
+        .badge-other { background: #e9ecef; color: #495057; }
+
+        .telegram-status {
+            background: #e8f0fe;
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 12px; }
+            .section { padding: 18px; }
+            th, td { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="company-name">فالنسيا للرخام والحجر الطبيعي <span>✦</span></div>
+        <div class="sub">نظام إدارة الموارد البشرية – تقارير شهرية وإشعارات تليجرام فورية (مضمن)</div>
+    </div>
+
+    <div class="stats-grid" id="globalStats"></div>
+
+    <!-- التقارير الشهرية -->
+    <div class="section">
+        <div class="section-title">
+            <span><i class="fas fa-calendar-alt"></i> التقارير الشهرية</span>
+            <div class="filters-row" style="margin:0; padding:0;">
+                <div class="filter-group">
+                    <label>الشهر:</label>
+                    <select id="monthSelect">
+                        <option value="1">يناير</option><option value="2">فبراير</option><option value="3">مارس</option>
+                        <option value="4">أبريل</option><option value="5">مايو</option><option value="6">يونيو</option>
+                        <option value="7">يوليو</option><option value="8">أغسطس</option><option value="9">سبتمبر</option>
+                        <option value="10">أكتوبر</option><option value="11">نوفمبر</option><option value="12">ديسمبر</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>السنة:</label>
+                    <input type="number" id="yearSelect" value="2026" step="1" style="width:90px">
+                </div>
+                <button id="applyMonthFilterBtn"><i class="fas fa-chart-line"></i> عرض التقرير</button>
+                <button id="sendReportToTelegramBtn" style="background:#2c9b77;"><i class="fab fa-telegram"></i> إرسال هذا التقرير إلى تليجرام</button>
+            </div>
+        </div>
+        <div id="monthlyStatsBox" style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:25px;"></div>
+        <div style="overflow-x:auto;">
+            <table id="monthlyOrdersTable">
+                <thead><tr><th>الموظف</th><th>القسم</th><th>نوع الأمر</th><th>التاريخ</th></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- إضافة أمر جديد (يُرسل إشعاراً تلقائياً) -->
+    <div class="section">
+        <div class="section-title"><span><i class="fas fa-plus-circle"></i> تسجيل أمر جديد للموظف (سيتم إرسال إشعار فوري للتليجرام)</span></div>
+        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+            <select id="newOrderEmpId" style="flex:2"></select>
+            <select id="newOrderType">
+                <option value="تجديد عقد">📄 تجديد عقد</option>
+                <option value="إجازة">🏖️ إجازة</option>
+                <option value="إنهاء خدمة">⚠️ إنهاء خدمة</option>
+                <option value="أخرى">📌 أخرى</option>
+            </select>
+            <input type="date" id="newOrderDate">
+            <button id="addOrderBtn"><i class="fas fa-save"></i> إضافة الأمر + إشعار فوري</button>
+        </div>
+        <div class="telegram-status" id="telegramNotifyStatus">
+            <i class="fab fa-telegram"></i> <span>سيتم إرسال إشعار تلقائي إلى قناة التليجرام عند إضافة أمر جديد</span>
+        </div>
+    </div>
+
+    <!-- كشف جميع الموظفين -->
+    <div class="section">
+        <div class="section-title"><span><i class="fas fa-users"></i> كشف جميع الموظفين (78 موظف) - آخر أمر مسجل</span></div>
+        <div class="filters-row">
+            <input type="text" id="searchEmployee" placeholder="🔍 بحث باسم الموظف" style="flex:1">
+            <select id="deptFilterEmployees">
+                <option value="">كل الأقسام</option>
+                <option value="sales">المبيعات</option><option value="warehouse">المستودعات</option>
+                <option value="projects">المشاريع</option><option value="vehicles">الآليات</option>
+                <option value="finance">المالية</option><option value="marketing">التسويق</option>
+            </select>
+        </div>
+        <div style="overflow-x:auto;">
+            <table id="allEmployeesTable">
+                <thead><tr><th>المعرف</th><th>الاسم</th><th>القسم</th><th>الفريق</th><th>آخر أمر</th><th>تاريخ آخر أمر</th></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- صيانة الآليات -->
+    <div class="section">
+        <div class="section-title"><span><i class="fas fa-truck"></i> صيانة الآليات (فوركليفت + شاحنات)</span></div>
+        <div id="maintenanceTableContainer"></div>
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
+            <input type="text" id="vehicleName" placeholder="اسم المركبة (فوركليفت-01)">
+            <input type="text" id="driverName" placeholder="السائق المسؤول">
+            <input type="date" id="maintenanceDate">
+            <button id="addMaintenanceBtn"><i class="fas fa-wrench"></i> تسجيل صيانة</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ======================= إعدادات التليجرام المضمنة (ثابتة) =======================
+    // 🔐 قم باستبدال القيمتين أدناه بتوكن البوت الحقيقي ومعرف القناة الخاص بك
+    const TELEGRAM_BOT_TOKEN = "8459387658:AAFTjYHSoDM3CBYOr2DPb6iMSG_Jk9lh6c0";   // مثال: "789456123:AAFgH...";
+    const TELEGRAM_CHAT_ID = "-1003552031590";       // مثال: "@ValenciaHR" أو "-100123456789"
+    // ===============================================================================
+
+    // ----------------------------- قاعدة بيانات الموظفين الكاملة -----------------------------
+    const buildFullEmployeesList = () => {
+        const baseRaw = [
+            { id: "DXB-6", name: "مهند نيازي السلق" },{ id: "DXB-10", name: "ركان اياد زياز" },{ id: "DXB-11", name: "فادي يوسف عرسالي" },
+            { id: "DXB-14", name: "نور الدين ماجد الريس" },{ id: "AB-1", name: "محمد حلمي" },{ id: "SHJ-52", name: "حمزة نذير عنطوز" },
+            { id: "SHJ-6", name: "تنفير انور محمد انور" },{ id: "SHJ-37", name: "احمد محمد على" },{ id: "SHJ-38", name: "مايكل انيرتى اوكو" },
+            { id: "AB-3", name: "ريمون تى" },{ id: "SHJ-40", name: "مستاز منور منور حسين" },{ id: "SHJ-54", name: "مبشر علي خادم حسين" },
+            { id: "SHJ-43", name: "عمر ياسر الرفاعي" },{ id: "AB-6", name: "قاسم محمد عيد عرسالي" },{ id: "AB-8", name: "امير حمزة عطاء الله" },
+            { id: "AB-9", name: "احمد ماهر عبدالرازق ابراهيم الغندور" },{ id: "DXB-15", name: "عمار فادي عوض" },{ id: "SHJ-44", name: "محى الدين حمد احمد محمد" },
+            { id: "SHJ-46", name: "بشيروا ادريسا هارون" },{ id: "DXB-17", name: "طارق محمد حيان الهربش" },{ id: "AB-11", name: "جيبسون وانجوهي وامبوي" },
+            { id: "SHJ-14", name: "حسن محمد السيد سالم" },{ id: "DXB-13", name: "محمد علي وليد ضيف الله" },{ id: "EXTRA-1", name: "بنجامين ابترتي" },
+            { id: "SHJ-22", name: "بيتر سوجورومان كانجبن" },{ id: "SHJ-16", name: "ايمانويل ياو داركواه" },{ id: "AB-4", name: "ايمانويل يبواه" },
+            { id: "SHJ-24", name: "اوجستين بواكى" },{ id: "SHJ-1", name: "عمران محمد حسين" },{ id: "SHJ-31", name: "عباس عبد الله بنجوره" },
+            { id: "SHJ-33", name: "سهيل خان صاحب على خان" },{ id: "SHJ-26", name: "ايساك امواكو" },{ id: "SHJ-63", name: "سهيل احمد ذوالفقار احمد" },
+            { id: "SHJ-65", name: "ديكسون انيم" },{ id: "SHJ-55", name: "عبد الرحمن عبدالله احمد عبدالله" },{ id: "SHJ-60", name: "يوسف اندريس احمد" },
+            { id: "SHJ-59", name: "نوري حسين محمد" },{ id: "SHJ-56", name: "حسام الدين طارق حسن مصيلحي" },{ id: "SHJ-57", name: "عمر على المك على" },
+            { id: "SHJ-58", name: "انس نذير عنطوز" },{ id: "AB-17", name: "شزاد شوكت شوكت برفاذ" },{ id: "SHJ-62", name: "مانوري حمانى" },
+            { id: "DXB-20", name: "محمد البدري احمد محمد" },{ id: "DXB-21", name: "ماجد يوسف ابراهيم غبريال" },{ id: "AB-19", name: "موسى ابراهيم موسى ابراهيم مغنين" },
+            { id: "SHJ-67", name: "سراج ايندريس احمد" },{ id: "AB-20", name: "فادي يوسف العلوه" },{ id: "AB-21", name: "فارس عبد الله محمد الشناوي عمر" },
+            { id: "BDXB-01", name: "احمد عادل محمد إبراهيم" },{ id: "BDXB-02", name: "احمد مصطفي محمد سليمان" },{ id: "BDXB-03", name: "احمد راعي عمر عباس" },
+            { id: "BDXB-04", name: "محمود محمد سعيد بدر صقر" },{ id: "BDXB-05", name: "مؤمن محمود فهمي" },{ id: "BDXB-06", name: "نجم محمد عبد الجليل" },
+            { id: "BDXB-07", name: "عمر علي حسن عبد الحميد القرنشاوي" },{ id: "BDXB-08", name: "قاسم ربيع خليل" },{ id: "BDXB-09", name: "محمد عبد العزيز حسن محمد" },
+            { id: "DXB-12", name: "حسن عبد العظيم" },{ id: "DXB-16", name: "خليل محمد الدج" },{ id: "DXB-18", name: "ياسر العبد الله" },
+            { id: "DXB-19", name: "محمد انس محمد وائل السرداني" },{ id: "DXB-22", name: "ال سعيد صالح محمد صالح" },{ id: "DXB-23", name: "محمد عبد الستار محمد" },
+            { id: "DXB-24", name: "صابر عبد الستار" },{ id: "SHJ-45", name: "مامون احمد حجازي" },{ id: "SHJ-50", name: "ايمان عبالله محمد ابراهيم الحوسني" },
+            { id: "EXTRA-2", name: "فاطمه عبدالرحمن حسن عبدالله الحمادى" },{ id: "SHJ-69", name: "ديريك اهيابو اووكو" },{ id: "BDXB-10", name: "ضياء الدين محمد علاء الدين" },
+            { id: "DXB-25", name: "محمد خالد عبد العال المرسي" },{ id: "SHJ-71", name: "ساقب شوكت شوكت بيرفايز" },{ id: "EXTRA-3", name: "سليمان الحسن" },
+            { id: "EXTRA-4", name: "فرانسيس نانا بلاي" },{ id: "EXTRA-5", name: "محمد حسن عيد الجوهري" },{ id: "AB-25", name: "امين احمد حجازي" },
+            { id: "EXTRA-6", name: "اسلام ماهر عبدالرازق ابراهيم الغندور" },{ id: "EXTRA-7", name: "منه الله محمد علاء" },{ id: "EXTRA-8", name: "رانيا فريد محمد" },
+            { id: "EXTRA-MALIK", name: "ملك علي بختاور" },{ id: "EXTRA-BRUNO1", name: "برونو توينوموجوني" },{ id: "EXTRA-BRUNO2", name: "برونو برونو توينوموجوني" },
+            { id: "EXTRA-OTHMAN", name: "عثمان صالح عثمان حامد" },{ id: "EXTRA-AHMED_SAMIR", name: "احمد سمير زين العابدين" },{ id: "EXTRA-ZAAREB", name: "احمد محمد علي زعرب" }
+        ];
+        const departmentMapping = (name) => {
+            if(name.includes("ركان")||name.includes("حمزة")||name.includes("فادي يوسف")||name.includes("نور الدين")) return "sales";
+            if(name.includes("عبد الرحمن عبدالله")||name.includes("يوسف اندريس")||name.includes("ايمانويل")||name.includes("جيبسون")||name.includes("ريمون")||name.includes("بشيروا")||name.includes("برونو")||name.includes("عثمان")||name.includes("احمد سمير")) return "warehouse";
+            if(name.includes("مبشر")||name.includes("امير حمزة")||name.includes("احمد ماهر")||name.includes("محمد البدري")||name.includes("مايكل")||name.includes("حسن محمد")||name.includes("اوجستين")||name.includes("اسلام ماهر")) return "vehicles";
+            if(name.includes("فاطمه عبدالرحمن")||name.includes("محمد حلمي")||name.includes("حسام الدين")||name.includes("عمر على")||name.includes("محمد علي وليد")||name.includes("مامون احمد")) return "finance";
+            if(name.includes("عمار فادي")||name.includes("منه الله")||name.includes("رانيا")||name.includes("امين احمد")) return "marketing";
+            return "projects";
+        };
+        return baseRaw.map(emp => ({ ...emp, dept: departmentMapping(emp.name), team: emp.dept === "sales" ? "sharjah_sales" : "general" }));
+    };
+
+    let employees = buildFullEmployeesList();
+    let hrOrders = [];
+    let maintenances = [];
+
+    // تحميل الأوامر الأولية من ملفات التقييم وExcel
+    function loadInitialOrders() {
+        const ordersData = [
+            { empName: "عبد الرحمن عبدالله احمد عبدالله", type: "تجديد عقد", date: "2026-05-10" },
+            { empName: "برونو توينوموجوني", type: "أخرى", date: "2026-05-12" },
+            { empName: "برونو برونو توينوموجوني", type: "أخرى", date: "2026-05-14" },
+            { empName: "عثمان صالح عثمان حامد", type: "إنهاء خدمة", date: "2026-05-20" },
+            { empName: "احمد سمير زين العابدين", type: "إنهاء خدمة", date: "2026-05-22" },
+            { empName: "محمد البدري احمد محمد", type: "إجازة", date: "2026-05-18" },
+            { empName: "احمد محمد علي زعرب", type: "إنهاء خدمة", date: "2026-06-01" },
+            { empName: "حمزة نذير عنطوز", type: "تجديد عقد", date: "2026-05-05" },
+            { empName: "ركان اياد زياز", type: "تجديد عقد", date: "2026-05-15" },
+            { empName: "فاطمه عبدالرحمن حسن عبدالله الحمادى", type: "تجديد عقد", date: "2026-05-25" },
+            { empName: "مبشر علي خادم حسين", type: "تجديد عقد", date: "2026-05-28" },
+            { empName: "ايمانويل ياو داركواه", type: "إنهاء خدمة", date: "2026-05-30" },
+            { empName: "يوسف اندريس احمد", type: "إجازة", date: "2026-05-21" },
+            { empName: "ال سعيد صالح محمد صالح", type: "إجازة", date: "2026-06-02" },
+            { empName: "ملك علي بختاور", type: "إنهاء خدمة", date: "2026-06-05" },
+            { empName: "محمد عبد العزيز حسن محمد", type: "إجازة", date: "2026-06-07" },
+            { empName: "ضياء الدين محمد علاء الدين", type: "إجازة", date: "2026-06-09" },
+            { empName: "محمد عبد الستار محمد", type: "إجازة", date: "2026-06-10" },
+            { empName: "منه الله محمد علاء", type: "أخرى", date: "2026-06-01" },
+            { empName: "رانيا فريد محمد", type: "تجديد عقد", date: "2026-05-29" },
+            { empName: "امين احمد حجازي", type: "تجديد عقد", date: "2026-05-20" }
+        ];
+        for (let ord of ordersData) {
+            const emp = employees.find(e => e.name === ord.empName);
+            if(emp) hrOrders.push({ empId: emp.id, type: ord.type, date: ord.date });
+        }
+        if(employees.find(e=>e.id==="DXB-10")) hrOrders.push({ empId: "DXB-10", type: "تجديد عقد", date: "2026-04-10" });
+        if(employees.find(e=>e.id==="SHJ-52")) hrOrders.push({ empId: "SHJ-52", type: "تجديد عقد", date: "2026-04-18" });
+        if(employees.find(e=>e.id==="AB-25")) hrOrders.push({ empId: "AB-25", type: "إجازة", date: "2026-06-14" });
+    }
+
+    function initMaintenance() {
+        maintenances = [
+            { vehicle: "فوركليفت 1", driver: "احمد ماهر", date: "2026-05-10", status: "تم الصيانة" },
+            { vehicle: "شاحنة نقل 05", driver: "مبشر علي", date: "2026-05-20", status: "قادمة" }
+        ];
+    }
+
+    function saveAllData() {
+        localStorage.setItem("valencia_hr_employees", JSON.stringify(employees));
+        localStorage.setItem("valencia_hr_orders", JSON.stringify(hrOrders));
+        localStorage.setItem("valencia_maintenances", JSON.stringify(maintenances));
+    }
+
+    function loadAllData() {
+        const storedEmps = localStorage.getItem("valencia_hr_employees");
+        const storedOrders = localStorage.getItem("valencia_hr_orders");
+        const storedMaint = localStorage.getItem("valencia_maintenances");
+        if(storedEmps) employees = JSON.parse(storedEmps);
+        if(storedOrders) hrOrders = JSON.parse(storedOrders);
+        if(storedMaint) maintenances = JSON.parse(storedMaint);
+        if(!storedOrders) { loadInitialOrders(); }
+        if(!storedMaint) initMaintenance();
+    }
+
+    // إرسال رسالة إلى التليجرام (دالة عامة)
+    async function sendTelegramMessage(text) {
+        if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") {
+            console.warn("⚠️ لم يتم تعيين توكن البوت بعد. الرجاء إدخال التوكن الحقيقي في الكود.");
+            document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fas fa-exclamation-triangle"></i> ⚠️ لم يتم تكوين التوكن بعد، يرجى إدخال بيانات التليجرام في الكود.`;
+            return false;
+        }
+        if (!TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === "YOUR_CHAT_ID_HERE") {
+            console.warn("⚠️ لم يتم تعيين معرف القناة.");
+            document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fas fa-exclamation-triangle"></i> ⚠️ معرف القناة غير مضبوط.`;
+            return false;
+        }
+        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text, parse_mode: "HTML" })
+            });
+            const res = await response.json();
+            if(res.ok) {
+                document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fab fa-telegram"></i> ✅ تم إرسال الإشعار إلى التليجرام بنجاح`;
+                setTimeout(()=>{ document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fab fa-telegram"></i> <span>سيتم إرسال إشعار تلقائي إلى قناة التليجرام عند إضافة أمر جديد</span>`; }, 4000);
+                return true;
+            } else throw new Error(res.description);
+        } catch(e) {
+            console.error(e);
+            document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fas fa-times-circle"></i> ❌ فشل الإرسال: ${e.message}`;
+            return false;
+        }
+    }
+
+    // إنشاء نص الإشعار للأمر الجديد
+    function buildNewOrderMessage(empName, orderType, orderDate, dept) {
+        let emoji = "📋";
+        if(orderType === "تجديد عقد") emoji = "✅";
+        else if(orderType === "إجازة") emoji = "🏖️";
+        else if(orderType === "إنهاء خدمة") emoji = "⚠️";
+        return `📢 *إشعار جديد - نظام موارد بشرية فالنسيا*\n${emoji} *نوع الأمر:* ${orderType}\n👤 *الموظف:* ${empName}\n🏢 *القسم:* ${dept}\n📅 *التاريخ:* ${orderDate}\n🔔 تم تسجيل الأمر بنجاح في النظام.`;
+    }
+
+    // إضافة أمر مع إرسال إشعار تلقائي
+    async function addOrderWithNotification(empId, type, date) {
+        if(!empId || !date) { alert("اختر موظفاً وتاريخاً"); return false; }
+        const employee = employees.find(e=>e.id === empId);
+        if(!employee) return false;
+        hrOrders.push({ empId, type, date });
+        saveAllData();
+        renderGlobalStats();
+        renderMonthlyReport();
+        renderAllEmployees();
+        // إرسال إشعار إلى التليجرام
+        const msg = buildNewOrderMessage(employee.name, type, date, employee.dept);
+        await sendTelegramMessage(msg);
+        return true;
+    }
+
+    // باقي دوال العرض
+    function renderGlobalStats() {
+        const total = hrOrders.length;
+        const renew = hrOrders.filter(o=>o.type==="تجديد عقد").length;
+        const leave = hrOrders.filter(o=>o.type==="إجازة").length;
+        const term = hrOrders.filter(o=>o.type==="إنهاء خدمة").length;
+        const other = hrOrders.filter(o=>o.type==="أخرى").length;
+        document.getElementById("globalStats").innerHTML = `
+            <div class="stat-card"><i class="fas fa-list"></i><h4>إجمالي الأوامر</h4><div class="value">${total}</div></div>
+            <div class="stat-card"><i class="fas fa-file-signature"></i><h4>تجديد عقود</h4><div class="value">${renew}</div></div>
+            <div class="stat-card"><i class="fas fa-umbrella-beach"></i><h4>إجازات</h4><div class="value">${leave}</div></div>
+            <div class="stat-card"><i class="fas fa-user-slash"></i><h4>إنهاء خدمة</h4><div class="value">${term}</div></div>
+            <div class="stat-card"><i class="fas fa-ellipsis-h"></i><h4>أوامر أخرى</h4><div class="value">${other}</div></div>
+        `;
+    }
+
+    function renderMonthlyReport() {
+        const month = parseInt(document.getElementById("monthSelect").value);
+        const year = parseInt(document.getElementById("yearSelect").value);
+        const filtered = hrOrders.filter(o => {
+            const d = new Date(o.date);
+            return d.getFullYear() === year && (d.getMonth()+1) === month;
+        });
+        const renew = filtered.filter(o=>o.type==="تجديد عقد").length;
+        const leave = filtered.filter(o=>o.type==="إجازة").length;
+        const term = filtered.filter(o=>o.type==="إنهاء خدمة").length;
+        const other = filtered.filter(o=>o.type==="أخرى").length;
+        document.getElementById("monthlyStatsBox").innerHTML = `
+            <div class="stat-card" style="background:#faf3e0;"><h4>تجديدات العقد</h4><div class="value">${renew}</div></div>
+            <div class="stat-card" style="background:#e3f2fd;"><h4>إجازات</h4><div class="value">${leave}</div></div>
+            <div class="stat-card" style="background:#ffe0b5;"><h4>إنهاء خدمة</h4><div class="value">${term}</div></div>
+            <div class="stat-card" style="background:#e8eaf6;"><h4>أخرى</h4><div class="value">${other}</div></div>
+        `;
+        const tbody = document.querySelector("#monthlyOrdersTable tbody");
+        tbody.innerHTML = "";
+        filtered.forEach(order => {
+            const emp = employees.find(e=>e.id === order.empId);
+            if(emp) {
+                let badgeClass = "badge-other";
+                if(order.type === "تجديد عقد") badgeClass = "badge-renew";
+                else if(order.type === "إجازة") badgeClass = "badge-leave";
+                else if(order.type === "إنهاء خدمة") badgeClass = "badge-termination";
+                tbody.innerHTML += `<tr><td>${emp.name}</td><td>${emp.dept}</td><td><span class="badge ${badgeClass}">${order.type}</span></td><td>${order.date}</td></tr>`;
+            }
+        });
+        if(filtered.length===0) tbody.innerHTML = "<tr><td colspan='4'>لا توجد أوامر في هذا الشهر</td></tr>";
+    }
+
+    function renderAllEmployees() {
+        const search = document.getElementById("searchEmployee").value.toLowerCase();
+        const deptFilter = document.getElementById("deptFilterEmployees").value;
+        let filtered = employees.filter(emp => (!search || emp.name.includes(search)) && (!deptFilter || emp.dept === deptFilter));
+        const tbody = document.querySelector("#allEmployeesTable tbody");
+        tbody.innerHTML = "";
+        filtered.forEach(emp => {
+            const empOrders = hrOrders.filter(o => o.empId === emp.id).sort((a,b)=> new Date(b.date)-new Date(a.date));
+            const last = empOrders[0];
+            const lastType = last ? last.type : "—";
+            const lastDate = last ? last.date : "—";
+            tbody.innerHTML += `<tr><td>${emp.id}</td><td>${emp.name}</td><td>${emp.dept}</td><td>${emp.team}</td><td>${lastType}</td><td>${lastDate}</td></tr>`;
+        });
+    }
+
+    function renderMaintenanceTable() {
+        let html = `</table><thead><tr><th>المركبة</th><th>السائق</th><th>تاريخ الصيانة</th><th>الحالة</th></tr></thead><tbody>`;
+        maintenances.forEach(m => { html += `<tr><td>${m.vehicle}</td><td>${m.driver}</td><td>${m.date}</td><td>${m.status}</td></tr>`; });
+        html += `</tbody></table>`;
+        document.getElementById("maintenanceTableContainer").innerHTML = html;
+    }
+
+    function addMaintenance(vehicle, driver, date) {
+        maintenances.push({ vehicle, driver, date, status: "تم التسجيل" });
+        saveAllData();
+        renderMaintenanceTable();
+    }
+
+    // إرسال التقرير الشهري يدويًا
+    async function sendMonthlyReport() {
+        const month = document.getElementById("monthSelect").value;
+        const year = document.getElementById("yearSelect").value;
+        const filtered = hrOrders.filter(o => { const d = new Date(o.date); return d.getFullYear() == year && (d.getMonth()+1) == month; });
+        const renew = filtered.filter(o=>o.type==="تجديد عقد").length;
+        const leave = filtered.filter(o=>o.type==="إجازة").length;
+        const term = filtered.filter(o=>o.type==="إنهاء خدمة").length;
+        const other = filtered.filter(o=>o.type==="أخرى").length;
+        const lines = `📊 *تقرير فالنسيا الشهري* - ${month}/${year}\n✅ تجديد عقود: ${renew}\n🏖️ إجازات: ${leave}\n⚠️ إنهاء خدمة: ${term}\n📌 أوامر أخرى: ${other}\n📋 إجمالي الأوامر: ${filtered.length}`;
+        await sendTelegramMessage(lines);
+    }
+
+    // ربط الأحداث
+    document.getElementById("applyMonthFilterBtn").onclick = () => renderMonthlyReport();
+    document.getElementById("sendReportToTelegramBtn").onclick = () => sendMonthlyReport();
+    document.getElementById("addOrderBtn").onclick = async () => {
+        const empId = document.getElementById("newOrderEmpId").value;
+        const type = document.getElementById("newOrderType").value;
+        const date = document.getElementById("newOrderDate").value;
+        if(await addOrderWithNotification(empId, type, date)) alert("تم إضافة الأمر وإرسال الإشعار إلى التليجرام");
+        else alert("فشلت الإضافة");
+    };
+    document.getElementById("addMaintenanceBtn").onclick = () => {
+        const vehicle = document.getElementById("vehicleName").value;
+        const driver = document.getElementById("driverName").value;
+        const date = document.getElementById("maintenanceDate").value;
+        if(vehicle && driver && date) { addMaintenance(vehicle, driver, date); alert("تم تسجيل الصيانة"); }
+        else alert("املأ جميع الحقول");
+    };
+    document.getElementById("searchEmployee").addEventListener("input", renderAllEmployees);
+    document.getElementById("deptFilterEmployees").addEventListener("change", renderAllEmployees);
+
+    function populateEmployeeSelect() {
+        const select = document.getElementById("newOrderEmpId");
+        select.innerHTML = "<option value=''>-- اختر موظف --</option>";
+        employees.forEach(emp => { select.innerHTML += `<option value="${emp.id}">${emp.name} (${emp.dept})</option>`; });
+    }
+
+    window.onload = () => {
+        loadAllData();
+        populateEmployeeSelect();
+        renderGlobalStats();
+        renderMonthlyReport();
+        renderAllEmployees();
+        renderMaintenanceTable();
+        saveAllData();
+        if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") {
+            document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fas fa-cog"></i> ⚙️ لم يتم تكوين توكن التليجرام بعد. الرجاء إدخال البيانات الحقيقية في الكود (متغيرات TELEGRAM_BOT_TOKEN و TELEGRAM_CHAT_ID)`;
+        }
+    };
+</script>
+</body>
+</html>
