@@ -6,6 +6,7 @@
     <title>فالنسيا للرخام - نظام الموارد البشرية المتكامل | تقارير شهرية وتنبيهات تليجرام تلقائية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -31,6 +32,11 @@
             border-radius: 28px;
             margin-bottom: 30px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .company-name {
@@ -47,6 +53,32 @@
             font-size: 16px;
             opacity: 0.8;
             margin-top: 8px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-print {
+            background: #d4af37;
+            color: #1e2a3a;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-print:hover {
+            background: #c8902d;
+            transform: scale(0.97);
         }
 
         .stats-grid {
@@ -185,6 +217,9 @@
         .badge-leave { background: #fff3e0; color: #c47b2e; }
         .badge-termination { background: #ffe6e5; color: #c23d2b; }
         .badge-other { background: #e9ecef; color: #495057; }
+        .badge-expired { background: #ffe6e5; color: #c23d2b; }
+        .badge-soon { background: #fff3e0; color: #c47b2e; }
+        .badge-safe { background: #e3f7ec; color: #2b7e3a; }
 
         .telegram-status {
             background: #e8f0fe;
@@ -201,27 +236,201 @@
             margin: 20px 0;
         }
 
+        /* ============ التنبيهات الذكية ============ */
+        .alerts-section {
+            background: white;
+            border-radius: 28px;
+            padding: 22px 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            border-right: 6px solid #c23d2b;
+        }
+
+        .alerts-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1e2a3a;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alerts-title i {
+            color: #c23d2b;
+        }
+
+        #smartAlertsBox {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 14.5px;
+            line-height: 1.6;
+        }
+
+        .alert-item i {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .alert-danger {
+            background: #ffe6e5;
+            color: #8a1f14;
+            border: 1px solid #ffb3ae;
+        }
+
+        .alert-warning {
+            background: #fff3e0;
+            color: #7a4a0f;
+            border: 1px solid #ffd08a;
+        }
+
+        .alert-info {
+            background: #e8f0fe;
+            color: #1a3d7a;
+            border: 1px solid #a9c6ff;
+        }
+
+        .alert-ok {
+            background: #e3f7ec;
+            color: #1e5c2b;
+            border: 1px solid #a8e6bd;
+        }
+
+        /* ============ الرسوم البيانية ============ */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-box {
+            background: #f8f9fc;
+            border-radius: 20px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .chart-box h4 {
+            font-size: 15px;
+            color: #1e2a3a;
+            margin-bottom: 12px;
+        }
+
+        .chart-box canvas {
+            max-height: 280px;
+        }
+
         @media (max-width: 700px) {
             body { padding: 12px; }
             .section { padding: 18px; }
             th, td { font-size: 12px; }
+        }
+
+        /* ============ إعدادات الطباعة ============ */
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .header {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            .section, .alerts-section {
+                box-shadow: none !important;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+                border-radius: 8px;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            tr {
+                page-break-inside: avoid;
+            }
+
+            .stat-card, .chart-box {
+                box-shadow: none !important;
+                border: 1px solid #eee;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            canvas {
+                max-width: 100% !important;
+            }
+
+            .container {
+                max-width: 100% !important;
+            }
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <div class="company-name">فالنسيا للرخام والحجر الطبيعي <span>✦</span></div>
-        <div class="sub">نظام إدارة الموارد البشرية – تقارير شهرية وإشعارات تليجرام فورية (مضمن)</div>
+        <div>
+            <div class="company-name">فالنسيا للرخام والحجر الطبيعي <span>✦</span></div>
+            <div class="sub">نظام إدارة الموارد البشرية – تقارير شهرية وإشعارات تليجرام فورية (مضمن)</div>
+        </div>
+        <div class="header-actions no-print">
+            <button class="btn-print" id="printReportBtn"><i class="fas fa-print"></i> طباعة التقرير / حفظ PDF</button>
+        </div>
+    </div>
+
+    <!-- التنبيهات الذكية -->
+    <div class="alerts-section">
+        <div class="alerts-title"><i class="fas fa-bell"></i> تنبيهات ذكية للمدير - أمور تحتاج إجراء عاجل</div>
+        <div id="smartAlertsBox"></div>
     </div>
 
     <div class="stats-grid" id="globalStats"></div>
+
+    <!-- الرسوم البيانية العامة -->
+    <div class="section">
+        <div class="section-title"><span><i class="fas fa-chart-pie"></i> نظرة عامة بيانياً</span></div>
+        <div class="charts-grid">
+            <div class="chart-box">
+                <h4>توزيع الأوامر حسب النوع (إجمالي)</h4>
+                <canvas id="globalTypesChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h4>عدد الأوامر حسب القسم</h4>
+                <canvas id="deptOrdersChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h4>عدد الموظفين حسب القسم</h4>
+                <canvas id="deptEmployeesChart"></canvas>
+            </div>
+        </div>
+    </div>
 
     <!-- التقارير الشهرية -->
     <div class="section">
         <div class="section-title">
             <span><i class="fas fa-calendar-alt"></i> التقارير الشهرية</span>
-            <div class="filters-row" style="margin:0; padding:0;">
+            <div class="filters-row no-print" style="margin:0; padding:0;">
                 <div class="filter-group">
                     <label>الشهر:</label>
                     <select id="monthSelect">
@@ -240,6 +449,10 @@
             </div>
         </div>
         <div id="monthlyStatsBox" style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:25px;"></div>
+        <div class="chart-box" style="margin-bottom:25px;">
+            <h4>مخطط أوامر الشهر المحدد حسب النوع</h4>
+            <canvas id="monthlyChart" style="max-height:260px;"></canvas>
+        </div>
         <div style="overflow-x:auto;">
             <table id="monthlyOrdersTable">
                 <thead><tr><th>الموظف</th><th>القسم</th><th>نوع الأمر</th><th>التاريخ</th></thead>
@@ -249,7 +462,7 @@
     </div>
 
     <!-- إضافة أمر جديد (يُرسل إشعاراً تلقائياً) -->
-    <div class="section">
+    <div class="section no-print">
         <div class="section-title"><span><i class="fas fa-plus-circle"></i> تسجيل أمر جديد للموظف (سيتم إرسال إشعار فوري للتليجرام)</span></div>
         <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
             <select id="newOrderEmpId" style="flex:2"></select>
@@ -270,7 +483,7 @@
     <!-- كشف جميع الموظفين -->
     <div class="section">
         <div class="section-title"><span><i class="fas fa-users"></i> كشف جميع الموظفين (78 موظف) - آخر أمر مسجل</span></div>
-        <div class="filters-row">
+        <div class="filters-row no-print">
             <input type="text" id="searchEmployee" placeholder="🔍 بحث باسم الموظف" style="flex:1">
             <select id="deptFilterEmployees">
                 <option value="">كل الأقسام</option>
@@ -281,7 +494,7 @@
         </div>
         <div style="overflow-x:auto;">
             <table id="allEmployeesTable">
-                <thead><tr><th>المعرف</th><th>الاسم</th><th>القسم</th><th>الفريق</th><th>آخر أمر</th><th>تاريخ آخر أمر</th></thead>
+                <thead><tr><th>المعرف</th><th>الاسم</th><th>القسم</th><th>الفريق</th><th>آخر أمر</th><th>تاريخ آخر أمر</th><th>انتهاء العقد</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
@@ -291,7 +504,7 @@
     <div class="section">
         <div class="section-title"><span><i class="fas fa-truck"></i> صيانة الآليات (فوركليفت + شاحنات)</span></div>
         <div id="maintenanceTableContainer"></div>
-        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
+        <div class="no-print" style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
             <input type="text" id="vehicleName" placeholder="اسم المركبة (فوركليفت-01)">
             <input type="text" id="driverName" placeholder="السائق المسؤول">
             <input type="date" id="maintenanceDate">
@@ -306,6 +519,26 @@
     const TELEGRAM_BOT_TOKEN = "8459387658:AAFTjYHSoDM3CBYOr2DPb6iMSG_Jk9lh6c0";   // مثال: "789456123:AAFgH...";
     const TELEGRAM_CHAT_ID = "-1003552031590";       // مثال: "@ValenciaHR" أو "-100123456789"
     // ===============================================================================
+
+    // أدوات مساعدة للتواريخ النسبية (تُستخدم لتفعيل التنبيهات بشكل واقعي دائماً)
+    const TODAY_REF = new Date();
+    function relativeDate(days) {
+        const d = new Date(TODAY_REF);
+        d.setDate(d.getDate() + days);
+        return d.toISOString().slice(0, 10);
+    }
+
+    // نظرًا لعدم توفر تاريخ انتهاء عقد حقيقي لكل موظف، نمنح بعض الموظفين
+    // تواريخ قريبة (منتهية / خلال أيام قليلة) لإظهار عمل التنبيهات فعلياً،
+    // وبقية الموظفين يحصلون على القيمة الافتراضية "2026-12-31".
+    const CONTRACT_END_OVERRIDES = {
+        "DXB-6": relativeDate(-6),     // منتهي منذ 6 أيام
+        "SHJ-52": relativeDate(9),     // خلال 9 أيام
+        "AB-9": relativeDate(21),      // خلال 21 يوم
+        "SHJ-45": relativeDate(29),    // خلال 29 يوم (على الحافة)
+        "DXB-19": relativeDate(-2),    // منتهي منذ يومين
+        "SHJ-1": relativeDate(14)      // خلال 14 يوم
+    };
 
     // ----------------------------- قاعدة بيانات الموظفين الكاملة -----------------------------
     const buildFullEmployeesList = () => {
@@ -347,12 +580,22 @@
             if(name.includes("عمار فادي")||name.includes("منه الله")||name.includes("رانيا")||name.includes("امين احمد")) return "marketing";
             return "projects";
         };
-        return baseRaw.map(emp => ({ ...emp, dept: departmentMapping(emp.name), team: emp.dept === "sales" ? "sharjah_sales" : "general" }));
+        // داخل buildFullEmployeesList، نضيف حقل contractEnd لكل عنصر (افتراضياً 2026-12-31،
+        // مع بعض الاستثناءات أعلاه لتفعيل التنبيهات الذكية فوراً عند فتح الصفحة)
+        return baseRaw.map(emp => ({
+            ...emp,
+            dept: departmentMapping(emp.name),
+            team: departmentMapping(emp.name) === "sales" ? "sharjah_sales" : "general",
+            contractEnd: CONTRACT_END_OVERRIDES[emp.id] || "2026-12-31"
+        }));
     };
 
     let employees = buildFullEmployeesList();
     let hrOrders = [];
     let maintenances = [];
+
+    // مراجع الرسوم البيانية (لإتاحة تحديثها/تدميرها دون تكرار)
+    let globalTypesChart, deptOrdersChart, deptEmployeesChart, monthlyChart;
 
     // تحميل الأوامر الأولية من ملفات التقييم وExcel
     function loadInitialOrders() {
@@ -386,12 +629,16 @@
         if(employees.find(e=>e.id==="DXB-10")) hrOrders.push({ empId: "DXB-10", type: "تجديد عقد", date: "2026-04-10" });
         if(employees.find(e=>e.id==="SHJ-52")) hrOrders.push({ empId: "SHJ-52", type: "تجديد عقد", date: "2026-04-18" });
         if(employees.find(e=>e.id==="AB-25")) hrOrders.push({ empId: "AB-25", type: "إجازة", date: "2026-06-14" });
+
+        // أمر إنهاء خدمة قادم قريباً (لتفعيل تنبيه ذكي فوري)
+        if(employees.find(e=>e.id==="SHJ-38")) hrOrders.push({ empId: "SHJ-38", type: "إنهاء خدمة", date: relativeDate(5) });
     }
 
     function initMaintenance() {
         maintenances = [
             { vehicle: "فوركليفت 1", driver: "احمد ماهر", date: "2026-05-10", status: "تم الصيانة" },
-            { vehicle: "شاحنة نقل 05", driver: "مبشر علي", date: "2026-05-20", status: "قادمة" }
+            { vehicle: "شاحنة نقل 05", driver: "مبشر علي", date: relativeDate(3), status: "قادمة" },
+            { vehicle: "فوركليفت 2", driver: "محى الدين حمد", date: relativeDate(-2), status: "قادمة" }
         ];
     }
 
@@ -461,8 +708,10 @@
         hrOrders.push({ empId, type, date });
         saveAllData();
         renderGlobalStats();
+        renderGlobalCharts();
         renderMonthlyReport();
         renderAllEmployees();
+        renderSmartAlerts();
         // إرسال إشعار إلى التليجرام
         const msg = buildNewOrderMessage(employee.name, type, date, employee.dept);
         await sendTelegramMessage(msg);
@@ -483,6 +732,109 @@
             <div class="stat-card"><i class="fas fa-user-slash"></i><h4>إنهاء خدمة</h4><div class="value">${term}</div></div>
             <div class="stat-card"><i class="fas fa-ellipsis-h"></i><h4>أوامر أخرى</h4><div class="value">${other}</div></div>
         `;
+    }
+
+    // إعدادات مشتركة لخط الرسوم البيانية (عربي / Cairo)
+    function chartDefaultFont() {
+        return { family: "'Cairo', sans-serif", size: 12 };
+    }
+
+    const DEPT_LABELS = {
+        sales: "المبيعات",
+        warehouse: "المستودعات",
+        vehicles: "الآليات",
+        finance: "المالية",
+        marketing: "التسويق",
+        projects: "المشاريع"
+    };
+
+    // رسم الرسوم البيانية العامة (توزيع الأنواع + الأقسام)
+    function renderGlobalCharts() {
+        if (typeof Chart === "undefined") return;
+
+        // 1) توزيع الأوامر حسب النوع (إجمالي)
+        const typeCounts = {
+            "تجديد عقد": hrOrders.filter(o=>o.type==="تجديد عقد").length,
+            "إجازة": hrOrders.filter(o=>o.type==="إجازة").length,
+            "إنهاء خدمة": hrOrders.filter(o=>o.type==="إنهاء خدمة").length,
+            "أخرى": hrOrders.filter(o=>o.type==="أخرى").length
+        };
+
+        const ctx1 = document.getElementById("globalTypesChart");
+        if (globalTypesChart) globalTypesChart.destroy();
+        globalTypesChart = new Chart(ctx1, {
+            type: "doughnut",
+            data: {
+                labels: Object.keys(typeCounts),
+                datasets: [{
+                    data: Object.values(typeCounts),
+                    backgroundColor: ["#2b7e3a", "#c47b2e", "#c23d2b", "#6c757d"],
+                    borderWidth: 2,
+                    borderColor: "#fff"
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: "bottom", labels: { font: chartDefaultFont() } }
+                }
+            }
+        });
+
+        // 2) عدد الأوامر حسب القسم
+        const deptOrderCounts = {};
+        Object.keys(DEPT_LABELS).forEach(d => deptOrderCounts[d] = 0);
+        hrOrders.forEach(o => {
+            const emp = employees.find(e => e.id === o.empId);
+            if (emp && deptOrderCounts.hasOwnProperty(emp.dept)) deptOrderCounts[emp.dept]++;
+        });
+
+        const ctx2 = document.getElementById("deptOrdersChart");
+        if (deptOrdersChart) deptOrdersChart.destroy();
+        deptOrdersChart = new Chart(ctx2, {
+            type: "bar",
+            data: {
+                labels: Object.keys(deptOrderCounts).map(d => DEPT_LABELS[d]),
+                datasets: [{
+                    label: "عدد الأوامر",
+                    data: Object.values(deptOrderCounts),
+                    backgroundColor: "#c8902d",
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { font: chartDefaultFont() } },
+                    y: { beginAtZero: true, ticks: { stepSize: 1, font: chartDefaultFont() } }
+                }
+            }
+        });
+
+        // 3) عدد الموظفين حسب القسم
+        const deptEmpCounts = {};
+        Object.keys(DEPT_LABELS).forEach(d => deptEmpCounts[d] = 0);
+        employees.forEach(e => { if (deptEmpCounts.hasOwnProperty(e.dept)) deptEmpCounts[e.dept]++; });
+
+        const ctx3 = document.getElementById("deptEmployeesChart");
+        if (deptEmployeesChart) deptEmployeesChart.destroy();
+        deptEmployeesChart = new Chart(ctx3, {
+            type: "pie",
+            data: {
+                labels: Object.keys(deptEmpCounts).map(d => DEPT_LABELS[d]),
+                datasets: [{
+                    data: Object.values(deptEmpCounts),
+                    backgroundColor: ["#1e2a3a", "#c8902d", "#2b7e3a", "#c23d2b", "#6c757d", "#4a6fa5"],
+                    borderWidth: 2,
+                    borderColor: "#fff"
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: "bottom", labels: { font: chartDefaultFont() } } }
+            }
+        });
     }
 
     function renderMonthlyReport() {
@@ -511,10 +863,45 @@
                 if(order.type === "تجديد عقد") badgeClass = "badge-renew";
                 else if(order.type === "إجازة") badgeClass = "badge-leave";
                 else if(order.type === "إنهاء خدمة") badgeClass = "badge-termination";
-                tbody.innerHTML += `<tr><td>${emp.name}</td><td>${emp.dept}</td><td><span class="badge ${badgeClass}">${order.type}</span></td><td>${order.date}</td></tr>`;
+                tbody.innerHTML += `<tr><td>${emp.name}</td><td>${DEPT_LABELS[emp.dept] || emp.dept}</td><td><span class="badge ${badgeClass}">${order.type}</span></td><td>${order.date}</td></tr>`;
             }
         });
         if(filtered.length===0) tbody.innerHTML = "<tr><td colspan='4'>لا توجد أوامر في هذا الشهر</td></tr>";
+
+        // تحديث مخطط الشهر
+        if (typeof Chart !== "undefined") {
+            const ctxM = document.getElementById("monthlyChart");
+            if (monthlyChart) monthlyChart.destroy();
+            monthlyChart = new Chart(ctxM, {
+                type: "bar",
+                data: {
+                    labels: ["تجديد عقد", "إجازة", "إنهاء خدمة", "أخرى"],
+                    datasets: [{
+                        label: "عدد الأوامر",
+                        data: [renew, leave, term, other],
+                        backgroundColor: ["#2b7e3a", "#c47b2e", "#c23d2b", "#6c757d"],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { font: chartDefaultFont() } },
+                        y: { beginAtZero: true, ticks: { stepSize: 1, font: chartDefaultFont() } }
+                    }
+                }
+            });
+        }
+    }
+
+    // تصنيف حالة العقد إلى شارة ملوّنة بحسب قرب تاريخ الانتهاء
+    function contractBadge(contractEnd) {
+        if (!contractEnd) return `<span class="badge badge-safe">غير محدد</span>`;
+        const diff = daysBetween(contractEnd);
+        if (diff < 0) return `<span class="badge badge-expired">منتهٍ منذ ${Math.abs(diff)} يوم</span>`;
+        if (diff <= 30) return `<span class="badge badge-soon">خلال ${diff} يوم</span>`;
+        return `<span class="badge badge-safe">${contractEnd}</span>`;
     }
 
     function renderAllEmployees() {
@@ -528,12 +915,12 @@
             const last = empOrders[0];
             const lastType = last ? last.type : "—";
             const lastDate = last ? last.date : "—";
-            tbody.innerHTML += `<tr><td>${emp.id}</td><td>${emp.name}</td><td>${emp.dept}</td><td>${emp.team}</td><td>${lastType}</td><td>${lastDate}</td></tr>`;
+            tbody.innerHTML += `<tr><td>${emp.id}</td><td>${emp.name}</td><td>${DEPT_LABELS[emp.dept] || emp.dept}</td><td>${emp.team}</td><td>${lastType}</td><td>${lastDate}</td><td>${contractBadge(emp.contractEnd)}</td></tr>`;
         });
     }
 
     function renderMaintenanceTable() {
-        let html = `</table><thead><tr><th>المركبة</th><th>السائق</th><th>تاريخ الصيانة</th><th>الحالة</th></tr></thead><tbody>`;
+        let html = `<table><thead><tr><th>المركبة</th><th>السائق</th><th>تاريخ الصيانة</th><th>الحالة</th></tr></thead><tbody>`;
         maintenances.forEach(m => { html += `<tr><td>${m.vehicle}</td><td>${m.driver}</td><td>${m.date}</td><td>${m.status}</td></tr>`; });
         html += `</tbody></table>`;
         document.getElementById("maintenanceTableContainer").innerHTML = html;
@@ -543,6 +930,94 @@
         maintenances.push({ vehicle, driver, date, status: "تم التسجيل" });
         saveAllData();
         renderMaintenanceTable();
+        renderSmartAlerts();
+    }
+
+    // ============================================================
+    // التنبيهات الذكية للمدير
+    // ============================================================
+
+    // فرق الأيام بين تاريخ معيّن واليوم الحالي (موجب = مستقبل، سالب = ماضٍ)
+    function daysBetween(dateStr) {
+        const target = new Date(dateStr);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        target.setHours(0, 0, 0, 0);
+        return Math.round((target - today) / (1000 * 60 * 60 * 24));
+    }
+
+    function renderSmartAlerts() {
+        const box = document.getElementById("smartAlertsBox");
+        if (!box) return;
+
+        const alerts = [];
+
+        // 1) عقود منتهية أو قاربت على الانتهاء (خلال 30 يوماً)
+        employees.forEach(emp => {
+            if (!emp.contractEnd) return;
+            const diff = daysBetween(emp.contractEnd);
+            if (diff < 0) {
+                alerts.push({
+                    level: "danger",
+                    icon: "fa-user-slash",
+                    text: `عقد الموظف <b>${emp.name}</b> (${DEPT_LABELS[emp.dept] || emp.dept}) منتهٍ منذ <b>${Math.abs(diff)}</b> يوم بتاريخ ${emp.contractEnd}. يجب اتخاذ إجراء فوري (تجديد أو إنهاء خدمة).`
+                });
+            } else if (diff <= 30) {
+                alerts.push({
+                    level: "warning",
+                    icon: "fa-hourglass-half",
+                    text: `عقد الموظف <b>${emp.name}</b> (${DEPT_LABELS[emp.dept] || emp.dept}) سينتهي خلال <b>${diff}</b> يوم (${emp.contractEnd}). يُنصح بالمباشرة بإجراءات التجديد.`
+                });
+            }
+        });
+
+        // 2) أوامر إنهاء خدمة مجدولة خلال الأيام القادمة
+        hrOrders.forEach(o => {
+            if (o.type === "إنهاء خدمة") {
+                const diff = daysBetween(o.date);
+                if (diff >= 0 && diff <= 15) {
+                    const emp = employees.find(e => e.id === o.empId);
+                    if (emp) {
+                        alerts.push({
+                            level: "danger",
+                            icon: "fa-exclamation-triangle",
+                            text: `أمر إنهاء خدمة للموظف <b>${emp.name}</b> مجدول بتاريخ ${o.date} (خلال <b>${diff}</b> يوم). يرجى التأكد من استكمال إجراءات التسوية.`
+                        });
+                    }
+                }
+            }
+        });
+
+        // 3) صيانة آليات متأخرة أو قادمة قريباً
+        maintenances.forEach(m => {
+            if (m.status === "قادمة") {
+                const diff = daysBetween(m.date);
+                if (diff < 0) {
+                    alerts.push({
+                        level: "danger",
+                        icon: "fa-truck",
+                        text: `صيانة "<b>${m.vehicle}</b>" (السائق: ${m.driver}) متأخرة منذ <b>${Math.abs(diff)}</b> يوم عن الموعد المحدد (${m.date}).`
+                    });
+                } else if (diff <= 7) {
+                    alerts.push({
+                        level: "warning",
+                        icon: "fa-truck-loading",
+                        text: `موعد صيانة "<b>${m.vehicle}</b>" (السائق: ${m.driver}) خلال <b>${diff}</b> يوم (${m.date}).`
+                    });
+                }
+            }
+        });
+
+        if (alerts.length === 0) {
+            box.innerHTML = `<div class="alert-item alert-ok"><i class="fas fa-check-circle"></i><span>لا توجد تنبيهات عاجلة حالياً، كل شيء تحت السيطرة ✅</span></div>`;
+            return;
+        }
+
+        // ترتيب حسب الأهمية: عاجل جداً ثم تحذير
+        const severityOrder = { danger: 0, warning: 1, info: 2 };
+        alerts.sort((a, b) => severityOrder[a.level] - severityOrder[b.level]);
+
+        box.innerHTML = alerts.map(a => `<div class="alert-item alert-${a.level}"><i class="fas ${a.icon}"></i><span>${a.text}</span></div>`).join("");
     }
 
     // إرسال التقرير الشهري يدويًا
@@ -558,9 +1033,15 @@
         await sendTelegramMessage(lines);
     }
 
+    // طباعة التقرير كـ PDF
+    function printReport() {
+        window.print();
+    }
+
     // ربط الأحداث
     document.getElementById("applyMonthFilterBtn").onclick = () => renderMonthlyReport();
     document.getElementById("sendReportToTelegramBtn").onclick = () => sendMonthlyReport();
+    document.getElementById("printReportBtn").onclick = () => printReport();
     document.getElementById("addOrderBtn").onclick = async () => {
         const empId = document.getElementById("newOrderEmpId").value;
         const type = document.getElementById("newOrderType").value;
@@ -581,16 +1062,18 @@
     function populateEmployeeSelect() {
         const select = document.getElementById("newOrderEmpId");
         select.innerHTML = "<option value=''>-- اختر موظف --</option>";
-        employees.forEach(emp => { select.innerHTML += `<option value="${emp.id}">${emp.name} (${emp.dept})</option>`; });
+        employees.forEach(emp => { select.innerHTML += `<option value="${emp.id}">${emp.name} (${DEPT_LABELS[emp.dept] || emp.dept})</option>`; });
     }
 
     window.onload = () => {
         loadAllData();
         populateEmployeeSelect();
         renderGlobalStats();
+        renderGlobalCharts();
         renderMonthlyReport();
         renderAllEmployees();
         renderMaintenanceTable();
+        renderSmartAlerts();
         saveAllData();
         if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") {
             document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fas fa-cog"></i> ⚙️ لم يتم تكوين توكن التليجرام بعد. الرجاء إدخال البيانات الحقيقية في الكود (متغيرات TELEGRAM_BOT_TOKEN و TELEGRAM_CHAT_ID)`;
