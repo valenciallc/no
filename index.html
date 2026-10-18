@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>فالنسيا للرخام - نظام الموارد البشرية المتكامل | تقارير شهرية وتنبيهات تليجرام تلقائية</title>
+    <title>فالنسيا للرخام - نظام الموارد البشرية المتكامل | تقارير شهرية وإحصائيات وتنبيهات تليجرام</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -186,6 +187,22 @@
             transform: scale(0.97);
         }
 
+        .btn-telegram {
+            background: #2c9b77;
+        }
+
+        .btn-telegram:hover {
+            background: #1f7a5c;
+        }
+
+        .btn-blue {
+            background: #3a5fa0;
+        }
+
+        .btn-blue:hover {
+            background: #2c4a80;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -204,6 +221,10 @@
             padding: 12px 8px;
             border-bottom: 1px solid #eceef2;
             text-align: center;
+        }
+
+        tbody tr:hover {
+            background: #fbf7ef;
         }
 
         .badge {
@@ -236,7 +257,6 @@
             margin: 20px 0;
         }
 
-        /* ============ التنبيهات الذكية ============ */
         .alerts-section {
             background: white;
             border-radius: 28px;
@@ -305,7 +325,6 @@
             border: 1px solid #a8e6bd;
         }
 
-        /* ============ الرسوم البيانية ============ */
         .charts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -329,13 +348,178 @@
             max-height: 280px;
         }
 
+        .excel-status {
+            background: #f2f7f4;
+            border-radius: 18px;
+            padding: 12px 18px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            border: 1px solid #d8e8de;
+            margin-bottom: 18px;
+        }
+
+        .excel-status.err {
+            background: #fff3f2;
+            border-color: #ffc9c2;
+        }
+
+        .company-health-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 22px;
+            align-items: center;
+        }
+
+        .health-gauge-box {
+            background: #f8f9fc;
+            border-radius: 20px;
+            padding: 18px;
+            text-align: center;
+            position: relative;
+        }
+
+        .health-gauge-box canvas {
+            max-height: 230px;
+            margin: auto;
+        }
+
+        .gauge-center {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .gauge-center .g-val {
+            font-size: 38px;
+            font-weight: 800;
+            color: #1e2a3a;
+            line-height: 1;
+        }
+
+        .gauge-center .g-lbl {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .health-components {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .health-row {
+            background: #f8f9fc;
+            border-radius: 16px;
+            padding: 12px 16px;
+        }
+
+        .health-row .hr-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 700;
+            color: #1e2a3a;
+            margin-bottom: 8px;
+        }
+
+        .health-bar {
+            height: 12px;
+            background: #e6e9ef;
+            border-radius: 30px;
+            overflow: hidden;
+        }
+
+        .health-bar span {
+            display: block;
+            height: 100%;
+            border-radius: 30px;
+            background: linear-gradient(90deg, #c8902d, #d4af37);
+        }
+
+        .emp-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .emp-card {
+            background: #f8f9fc;
+            border-radius: 16px;
+            padding: 14px 10px;
+            text-align: center;
+        }
+
+        .emp-card h5 {
+            font-size: 13px;
+            color: #6c757d;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .emp-card .v {
+            font-size: 26px;
+            font-weight: 800;
+            color: #1e2a3a;
+        }
+
+        .period-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .period-tabs button {
+            background: #eef1f6;
+            color: #1e2a3a;
+            border: 1px solid #e2e6ea;
+        }
+
+        .period-tabs button.active {
+            background: #1e2a3a;
+            color: #d4af37;
+            border-color: #1e2a3a;
+        }
+
+        .mini-note {
+            font-size: 12.5px;
+            color: #6c757d;
+            margin-top: 10px;
+            line-height: 1.7;
+        }
+
+        .table-mini {
+            width: 100%;
+            border-collapse: collapse;
+            display: table;
+            margin-top: 10px;
+        }
+
+        .table-mini th {
+            background: #f0f2f6;
+            color: #1e2a3a;
+            font-size: 12.5px;
+            padding: 9px 6px;
+        }
+
+        .table-mini td {
+            font-size: 13px;
+            padding: 8px 6px;
+        }
+
         @media (max-width: 700px) {
             body { padding: 12px; }
             .section { padding: 18px; }
             th, td { font-size: 12px; }
+            .company-health-grid { grid-template-columns: 1fr; }
         }
 
-        /* ============ إعدادات الطباعة ============ */
         @media print {
             body {
                 background: white !important;
@@ -370,7 +554,7 @@
                 page-break-inside: avoid;
             }
 
-            .stat-card, .chart-box {
+            .stat-card, .chart-box, .emp-card, .health-gauge-box, .health-row {
                 box-shadow: none !important;
                 border: 1px solid #eee;
                 -webkit-print-color-adjust: exact !important;
@@ -392,20 +576,130 @@
     <div class="header">
         <div>
             <div class="company-name">فالنسيا للرخام والحجر الطبيعي <span>✦</span></div>
-            <div class="sub">نظام إدارة الموارد البشرية – تقارير شهرية وإشعارات تليجرام فورية (مضمن)</div>
+            <div class="sub">نظام إدارة الموارد البشرية – تقارير شهرية وإحصائيات تفصيلية وبيانات Excel حية وإشعارات تليجرام</div>
         </div>
         <div class="header-actions no-print">
             <button class="btn-print" id="printReportBtn"><i class="fas fa-print"></i> طباعة التقرير / حفظ PDF</button>
         </div>
     </div>
 
-    <!-- التنبيهات الذكية -->
     <div class="alerts-section">
         <div class="alerts-title"><i class="fas fa-bell"></i> تنبيهات ذكية للمدير - أمور تحتاج إجراء عاجل</div>
         <div id="smartAlertsBox"></div>
     </div>
 
     <div class="stats-grid" id="globalStats"></div>
+
+    <!-- ============ لوحة الحالة العامة للشركة ============ -->
+    <div class="section">
+        <div class="section-title">
+            <span><i class="fas fa-heartbeat"></i> الحالة العامة للشركة</span>
+            <span class="no-print" style="font-size:14px; font-weight:600; color:#6c757d;" id="healthAsOf"></span>
+        </div>
+        <div class="stats-grid" id="companyStatusCards" style="margin-bottom:25px;"></div>
+        <div class="company-health-grid">
+            <div class="health-gauge-box">
+                <canvas id="healthGauge"></canvas>
+                <div class="gauge-center">
+                    <div class="g-val" id="healthValue">—</div>
+                    <div class="g-lbl">مؤشر صحة الشركة</div>
+                </div>
+            </div>
+            <div class="health-components" id="healthComponents"></div>
+        </div>
+    </div>
+
+    <!-- ============ الإحصائيات التفصيلية للموظفين ============ -->
+    <div class="section">
+        <div class="section-title">
+            <span><i class="fas fa-chart-bar"></i> إحصائيات كل موظف (يوم / أسبوع / شهر / سنة)</span>
+        </div>
+
+        <div class="filters-row no-print" style="align-items:center;">
+            <div class="period-tabs" id="periodTabs">
+                <button data-period="day"><i class="fas fa-sun"></i> يوم</button>
+                <button data-period="week"><i class="fas fa-calendar-week"></i> أسبوع</button>
+                <button data-period="month" class="active"><i class="fas fa-calendar-alt"></i> شهر</button>
+                <button data-period="year"><i class="fas fa-globe"></i> سنة</button>
+            </div>
+            <div class="filter-group">
+                <label>تاريخ مرجعي:</label>
+                <input type="date" id="statsRefDate">
+            </div>
+            <div class="filter-group" style="flex:1; min-width:250px;">
+                <label>الموظف:</label>
+                <select id="statsEmployee" style="flex:1"></select>
+            </div>
+            <button id="refreshExcelBtn2"><i class="fas fa-rotate"></i> تحديث البيانات</button>
+        </div>
+
+        <div class="emp-cards" id="empSummaryCards"></div>
+
+        <div class="charts-grid">
+            <div class="chart-box">
+                <h4 id="empBarTitle">أوامر الموظف خلال الفترة (حسب النوع)</h4>
+                <canvas id="statsEmpBar"></canvas>
+            </div>
+            <div class="chart-box">
+                <h4>توزيع أنواع الأوامر في الفترة</h4>
+                <canvas id="statsEmpDoughnut"></canvas>
+            </div>
+            <div class="chart-box">
+                <h4 id="empEvalTitle">تطور التقييم الشهري (من ملف Excel)</h4>
+                <canvas id="statsEmpEval"></canvas>
+            </div>
+            <div class="chart-box">
+                <h4>أعلى 10 موظفين بتقييم الفترة</h4>
+                <canvas id="statsRank"></canvas>
+            </div>
+        </div>
+
+        <div class="charts-grid" style="margin-top:20px;">
+            <div class="chart-box">
+                <h4>الشركة ككل: الأوامر حسب القسم خلال الفترة</h4>
+                <canvas id="statsDeptPeriod"></canvas>
+            </div>
+            <div class="chart-box">
+                <h4>الشركة ككل: متوسط التقييم الشهري</h4>
+                <canvas id="statsCompanyEval"></canvas>
+            </div>
+        </div>
+
+        <div style="overflow-x:auto; margin-top:20px;">
+            <table class="table-mini" id="empEventsTable">
+                <thead><tr><th>النوع</th><th>التفاصيل</th><th>التاريخ</th><th>المصدر</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ============ مصدر ملف Excel الحي ============ -->
+    <div class="section no-print">
+        <div class="section-title"><span><i class="fas fa-file-excel"></i> ملف Excel الحي (الأوامر والتقييمات الشهرية)</span></div>
+        <div class="excel-status" id="excelStatus">
+            <i class="fas fa-spinner fa-spin"></i> جارٍ محاولة تحميل ملف Excel من الموقع...
+        </div>
+        <div class="filters-row" style="margin-bottom:0;">
+            <div class="filter-group" style="flex:1; min-width:300px;">
+                <label>رابط الملف:</label>
+                <input type="text" id="excelSourceUrl" style="flex:1" placeholder="https://valenciallc.github.io/ev.xlsx">
+            </div>
+            <button id="refreshExcelBtn" class="btn-blue"><i class="fas fa-cloud-arrow-down"></i> تحميل من الرابط</button>
+            <button id="excelTemplateBtn"><i class="fas fa-file-csv"></i> تنزيل قالب Excel جاهز</button>
+            <label style="display:flex; align-items:center; gap:8px; background:white; padding:8px 16px; border-radius:40px; border:1px solid #ddd; cursor:pointer; font-weight:600; font-size:14px;">
+                <i class="fas fa-folder-open"></i> أو اختر ملفاً من الجهاز
+                <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" hidden>
+            </label>
+        </div>
+        <div class="mini-note">
+            <b>شكل الأعمدة المطلوب في ملف Excel</b> (الأسماء بالعربية أو الإنجليزية، ويمكن تغيير ترتيب الأعمدة):
+            <br>• ورقة <b>أوامر</b>: المعرف | الموظف | القسم | نوع الأمر (تجديد عقد / إجازة / إنهاء خدمة / أخرى) | التاريخ
+            <br>• ورقة <b>التقييمات</b>: المعرف | الموظف | القسم | الشهر (مثل 2026-09 أو 2026-09-15) | الدرجة | الدرجة العظمى | النسبة | التقدير
+            <br>• يمكن وضع الورقتين في نفس الملف، ويتم التعرف على كل ورقة تلقائياً. ضع الملف على موقع GitHub Pages بالاسم
+            <code>ev.xlsx</code> داخل مستودع الموقع (أي على رابط مثل <code>valenciallc.github.io/ev.xlsx</code>) ثم اضغط "تحميل من الرابط".
+            <br>• عند تعديلك الملف ورفعه، اضغط زر "تحديث البيانات" أو أعد فتح الصفحة لتظهر الأرقام الجديدة.
+        </div>
+    </div>
 
     <!-- الرسوم البيانية العامة -->
     <div class="section">
@@ -445,7 +739,7 @@
                     <input type="number" id="yearSelect" value="2026" step="1" style="width:90px">
                 </div>
                 <button id="applyMonthFilterBtn"><i class="fas fa-chart-line"></i> عرض التقرير</button>
-                <button id="sendReportToTelegramBtn" style="background:#2c9b77;"><i class="fab fa-telegram"></i> إرسال هذا التقرير إلى تليجرام</button>
+                <button id="sendReportToTelegramBtn" class="btn-telegram"><i class="fab fa-telegram"></i> إرسال هذا التقرير إلى تليجرام</button>
             </div>
         </div>
         <div id="monthlyStatsBox" style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:25px;"></div>
@@ -455,13 +749,13 @@
         </div>
         <div style="overflow-x:auto;">
             <table id="monthlyOrdersTable">
-                <thead><tr><th>الموظف</th><th>القسم</th><th>نوع الأمر</th><th>التاريخ</th></thead>
+                <thead><tr><th>الموظف</th><th>القسم</th><th>نوع الأمر</th><th>التاريخ</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
     </div>
 
-    <!-- إضافة أمر جديد (يُرسل إشعاراً تلقائياً) -->
+    <!-- إضافة أمر جديد -->
     <div class="section no-print">
         <div class="section-title"><span><i class="fas fa-plus-circle"></i> تسجيل أمر جديد للموظف (سيتم إرسال إشعار فوري للتليجرام)</span></div>
         <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
@@ -482,7 +776,7 @@
 
     <!-- كشف جميع الموظفين -->
     <div class="section">
-        <div class="section-title"><span><i class="fas fa-users"></i> كشف جميع الموظفين (78 موظف) - آخر أمر مسجل</span></div>
+        <div class="section-title"><span><i class="fas fa-users"></i> كشف جميع الموظفين - آخر أمر مسجل</span></div>
         <div class="filters-row no-print">
             <input type="text" id="searchEmployee" placeholder="🔍 بحث باسم الموظف" style="flex:1">
             <select id="deptFilterEmployees">
@@ -490,11 +784,12 @@
                 <option value="sales">المبيعات</option><option value="warehouse">المستودعات</option>
                 <option value="projects">المشاريع</option><option value="vehicles">الآليات</option>
                 <option value="finance">المالية</option><option value="marketing">التسويق</option>
+                <option value="excel">من ملف Excel</option>
             </select>
         </div>
         <div style="overflow-x:auto;">
             <table id="allEmployeesTable">
-                <thead><tr><th>المعرف</th><th>الاسم</th><th>القسم</th><th>الفريق</th><th>آخر أمر</th><th>تاريخ آخر أمر</th><th>انتهاء العقد</th></tr></thead>
+                <thead><tr><th>المعرف</th><th>الاسم</th><th>القسم</th><th>الفريق</th><th>آخر أمر</th><th>تاريخ آخر أمر</th><th>انتهاء العقد</th><th>آخر تقييم</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
@@ -514,13 +809,17 @@
 </div>
 
 <script>
-    // ======================= إعدادات التليجرام المضمنة (ثابتة) =======================
-    // 🔐 قم باستبدال القيمتين أدناه بتوكن البوت الحقيقي ومعرف القناة الخاص بك
-    const TELEGRAM_BOT_TOKEN = "8459387658:AAFTjYHSoDM3CBYOr2DPb6iMSG_Jk9lh6c0";   // مثال: "789456123:AAFgH...";
-    const TELEGRAM_CHAT_ID = "-1003552031590";       // مثال: "@ValenciaHR" أو "-100123456789"
-    // ===============================================================================
+    const TELEGRAM_BOT_TOKEN = "8459387658:AAFTjYHSoDM3CBYOr2DPb6iMSG_Jk9lh6c0";
+    const TELEGRAM_CHAT_ID = "-1003552031590";
 
-    // أدوات مساعدة للتواريخ النسبية (تُستخدم لتفعيل التنبيهات بشكل واقعي دائماً)
+    const EXCEL_SOURCES = [
+        "https://valenciallc.github.io/ev.xlsx",
+        "https://valenciallc.github.io/ev/ev.xlsx",
+        "https://valenciallc.github.io/data.xlsx",
+        "https://valenciallc.github.io/ev/data.xlsx",
+        "ev.xlsx"
+    ];
+
     const TODAY_REF = new Date();
     function relativeDate(days) {
         const d = new Date(TODAY_REF);
@@ -528,19 +827,15 @@
         return d.toISOString().slice(0, 10);
     }
 
-    // نظرًا لعدم توفر تاريخ انتهاء عقد حقيقي لكل موظف، نمنح بعض الموظفين
-    // تواريخ قريبة (منتهية / خلال أيام قليلة) لإظهار عمل التنبيهات فعلياً،
-    // وبقية الموظفين يحصلون على القيمة الافتراضية "2026-12-31".
     const CONTRACT_END_OVERRIDES = {
-        "DXB-6": relativeDate(-6),     // منتهي منذ 6 أيام
-        "SHJ-52": relativeDate(9),     // خلال 9 أيام
-        "AB-9": relativeDate(21),      // خلال 21 يوم
-        "SHJ-45": relativeDate(29),    // خلال 29 يوم (على الحافة)
-        "DXB-19": relativeDate(-2),    // منتهي منذ يومين
-        "SHJ-1": relativeDate(14)      // خلال 14 يوم
+        "DXB-6": relativeDate(-6),
+        "SHJ-52": relativeDate(9),
+        "AB-9": relativeDate(21),
+        "SHJ-45": relativeDate(29),
+        "DXB-19": relativeDate(-2),
+        "SHJ-1": relativeDate(14)
     };
 
-    // ----------------------------- قاعدة بيانات الموظفين الكاملة -----------------------------
     const buildFullEmployeesList = () => {
         const baseRaw = [
             { id: "DXB-6", name: "مهند نيازي السلق" },{ id: "DXB-10", name: "ركان اياد زياز" },{ id: "DXB-11", name: "فادي يوسف عرسالي" },
@@ -580,8 +875,6 @@
             if(name.includes("عمار فادي")||name.includes("منه الله")||name.includes("رانيا")||name.includes("امين احمد")) return "marketing";
             return "projects";
         };
-        // داخل buildFullEmployeesList، نضيف حقل contractEnd لكل عنصر (افتراضياً 2026-12-31،
-        // مع بعض الاستثناءات أعلاه لتفعيل التنبيهات الذكية فوراً عند فتح الصفحة)
         return baseRaw.map(emp => ({
             ...emp,
             dept: departmentMapping(emp.name),
@@ -593,11 +886,27 @@
     let employees = buildFullEmployeesList();
     let hrOrders = [];
     let maintenances = [];
+    let excelOrders = [];
+    let excelEvals = [];
+    let excelInfo = { ok: false, source: "", lastUpdate: null, rows: 0, error: "" };
 
-    // مراجع الرسوم البيانية (لإتاحة تحديثها/تدميرها دون تكرار)
     let globalTypesChart, deptOrdersChart, deptEmployeesChart, monthlyChart;
+    let healthGaugeChart, statsEmpBar, statsEmpDoughnut, statsEmpEval, statsRank, statsDeptPeriod, statsCompanyEval;
+    let currentPeriod = "month";
 
-    // تحميل الأوامر الأولية من ملفات التقييم وExcel
+    const DEPT_LABELS = {
+        sales: "المبيعات",
+        warehouse: "المستودعات",
+        vehicles: "الآليات",
+        finance: "المالية",
+        marketing: "التسويق",
+        projects: "المشاريع",
+        excel: "من ملف Excel"
+    };
+
+    const MONTHS_AR = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+    const WEEK_AR = ["الأحد","الإثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+
     function loadInitialOrders() {
         const ordersData = [
             { empName: "عبد الرحمن عبدالله احمد عبدالله", type: "تجديد عقد", date: "2026-05-10" },
@@ -629,8 +938,6 @@
         if(employees.find(e=>e.id==="DXB-10")) hrOrders.push({ empId: "DXB-10", type: "تجديد عقد", date: "2026-04-10" });
         if(employees.find(e=>e.id==="SHJ-52")) hrOrders.push({ empId: "SHJ-52", type: "تجديد عقد", date: "2026-04-18" });
         if(employees.find(e=>e.id==="AB-25")) hrOrders.push({ empId: "AB-25", type: "إجازة", date: "2026-06-14" });
-
-        // أمر إنهاء خدمة قادم قريباً (لتفعيل تنبيه ذكي فوري)
         if(employees.find(e=>e.id==="SHJ-38")) hrOrders.push({ empId: "SHJ-38", type: "إنهاء خدمة", date: relativeDate(5) });
     }
 
@@ -659,148 +966,636 @@
         if(!storedMaint) initMaintenance();
     }
 
-    // إرسال رسالة إلى التليجرام (دالة عامة)
-    async function sendTelegramMessage(text) {
-        if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") {
-            console.warn("⚠️ لم يتم تعيين توكن البوت بعد. الرجاء إدخال التوكن الحقيقي في الكود.");
-            document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fas fa-exclamation-triangle"></i> ⚠️ لم يتم تكوين التوكن بعد، يرجى إدخال بيانات التليجرام في الكود.`;
-            return false;
-        }
-        if (!TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === "YOUR_CHAT_ID_HERE") {
-            console.warn("⚠️ لم يتم تعيين معرف القناة.");
-            document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fas fa-exclamation-triangle"></i> ⚠️ معرف القناة غير مضبوط.`;
-            return false;
-        }
-        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    function saveExcelCache() {
         try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text, parse_mode: "HTML" })
-            });
-            const res = await response.json();
-            if(res.ok) {
-                document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fab fa-telegram"></i> ✅ تم إرسال الإشعار إلى التليجرام بنجاح`;
-                setTimeout(()=>{ document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fab fa-telegram"></i> <span>سيتم إرسال إشعار تلقائي إلى قناة التليجرام عند إضافة أمر جديد</span>`; }, 4000);
-                return true;
-            } else throw new Error(res.description);
-        } catch(e) {
-            console.error(e);
-            document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fas fa-times-circle"></i> ❌ فشل الإرسال: ${e.message}`;
-            return false;
+            localStorage.setItem("valencia_excel_orders", JSON.stringify(excelOrders));
+            localStorage.setItem("valencia_excel_evals", JSON.stringify(excelEvals));
+            localStorage.setItem("valencia_excel_info", JSON.stringify(excelInfo));
+        } catch (e) { /* ذاكرة ممتلئة – نتجاهل */ }
+    }
+
+    function loadExcelCache() {
+        try {
+            const o = localStorage.getItem("valencia_excel_orders");
+            const e = localStorage.getItem("valencia_excel_evals");
+            const i = localStorage.getItem("valencia_excel_info");
+            if (o) excelOrders = JSON.parse(o) || [];
+            if (e) excelEvals = JSON.parse(e) || [];
+            if (i) excelInfo = JSON.parse(i) || excelInfo;
+            return excelOrders.length + excelEvals.length > 0;
+        } catch (err) { return false; }
+    }
+
+    // ---------------- أدوات التطبيع ----------------
+    function normText(s) {
+        return String(s == null ? "" : s)
+            .replace(/[ً-ْـ]/g, "")
+            .replace(/[أإآٱ]/g, "ا")
+            .replace(/ى/g, "ي")
+            .replace(/ة/g, "ه")
+            .replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+            .replace(/\s+/g, " ")
+            .trim()
+            .toLowerCase();
+    }
+
+    function buildEmpKeyIndex() {
+        const idx = {};
+        employees.forEach(e => {
+            idx["ID:" + String(e.id).toUpperCase()] = e.id;
+            idx["NM:" + normText(e.name)] = e.id;
+        });
+        return idx;
+    }
+
+    let EMP_KEY_INDEX = {};
+
+    function resolveEmpId(idVal, nameVal) {
+        if (idVal) {
+            const hit = EMP_KEY_INDEX["ID:" + String(idVal).toUpperCase()];
+            if (hit) return hit;
         }
+        if (nameVal) {
+            const hit = EMP_KEY_INDEX["NM:" + normText(nameVal)];
+            if (hit) return hit;
+        }
+        if (nameVal && String(nameVal).trim()) return ensureVirtualEmployee(nameVal, null);
+        if (idVal && String(idVal).trim()) return ensureVirtualEmployee(idVal, null);
+        return null;
     }
 
-    // إنشاء نص الإشعار للأمر الجديد
-    function buildNewOrderMessage(empName, orderType, orderDate, dept) {
-        let emoji = "📋";
-        if(orderType === "تجديد عقد") emoji = "✅";
-        else if(orderType === "إجازة") emoji = "🏖️";
-        else if(orderType === "إنهاء خدمة") emoji = "⚠️";
-        return `📢 *إشعار جديد - نظام موارد بشرية فالنسيا*\n${emoji} *نوع الأمر:* ${orderType}\n👤 *الموظف:* ${empName}\n🏢 *القسم:* ${dept}\n📅 *التاريخ:* ${orderDate}\n🔔 تم تسجيل الأمر بنجاح في النظام.`;
+    function ensureVirtualEmployee(rawName, deptHint) {
+        const nm = String(rawName).trim();
+        const hit = EMP_KEY_INDEX["NM:" + normText(nm)];
+        if (hit) return hit;
+        const newId = "XL-" + (employees.length + 1) + "-" + normText(nm).replace(/\W/g, "").slice(0, 10);
+        const dept = deptHint && DEPT_LABELS[deptHint] ? deptHint : "excel";
+        employees.push({ id: newId, name: nm, dept, team: "excel", contractEnd: null, virtual: true });
+        EMP_KEY_INDEX["NM:" + normText(nm)] = newId;
+        EMP_KEY_INDEX["ID:" + newId.toUpperCase()] = newId;
+        return newId;
     }
 
-    // إضافة أمر مع إرسال إشعار تلقائي
-    async function addOrderWithNotification(empId, type, date) {
-        if(!empId || !date) { alert("اختر موظفاً وتاريخاً"); return false; }
-        const employee = employees.find(e=>e.id === empId);
-        if(!employee) return false;
-        hrOrders.push({ empId, type, date });
-        saveAllData();
-        renderGlobalStats();
-        renderGlobalCharts();
-        renderMonthlyReport();
-        renderAllEmployees();
-        renderSmartAlerts();
-        // إرسال إشعار إلى التليجرام
-        const msg = buildNewOrderMessage(employee.name, type, date, employee.dept);
-        await sendTelegramMessage(msg);
-        return true;
+    // ---------------- قراءة ملف Excel ----------------
+    function cellStr(v) {
+        if (v == null) return "";
+        if (v instanceof Date) return v.toISOString().slice(0, 10);
+        return String(v).trim();
     }
 
-    // باقي دوال العرض
-    function renderGlobalStats() {
-        const total = hrOrders.length;
-        const renew = hrOrders.filter(o=>o.type==="تجديد عقد").length;
-        const leave = hrOrders.filter(o=>o.type==="إجازة").length;
-        const term = hrOrders.filter(o=>o.type==="إنهاء خدمة").length;
-        const other = hrOrders.filter(o=>o.type==="أخرى").length;
-        document.getElementById("globalStats").innerHTML = `
-            <div class="stat-card"><i class="fas fa-list"></i><h4>إجمالي الأوامر</h4><div class="value">${total}</div></div>
-            <div class="stat-card"><i class="fas fa-file-signature"></i><h4>تجديد عقود</h4><div class="value">${renew}</div></div>
-            <div class="stat-card"><i class="fas fa-umbrella-beach"></i><h4>إجازات</h4><div class="value">${leave}</div></div>
-            <div class="stat-card"><i class="fas fa-user-slash"></i><h4>إنهاء خدمة</h4><div class="value">${term}</div></div>
-            <div class="stat-card"><i class="fas fa-ellipsis-h"></i><h4>أوامر أخرى</h4><div class="value">${other}</div></div>
-        `;
+    function toISODate(v) {
+        if (v == null || v === "") return "";
+        if (v instanceof Date && !isNaN(v)) {
+            return v.getFullYear() + "-" + String(v.getMonth() + 1).padStart(2, "0") + "-" + String(v.getDate()).padStart(2, "0");
+        }
+        const s = String(v).trim();
+        let m = s.match(/^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?/);
+        if (m) return m[1] + "-" + String(+m[2]).padStart(2, "0") + "-" + String(+(m[3] || 1)).padStart(2, "0");
+        m = s.match(/^(\d{1,2})[\/\.-](\d{1,2})[\/\.-](\d{4})$/);
+        if (m) return m[3] + "-" + String(+m[2]).padStart(2, "0") + "-" + String(+m[1]).padStart(2, "0");
+        for (let i = 0; i < MONTHS_AR.length; i++) {
+            if (s.includes(MONTHS_AR[i])) {
+                const y = s.match(/\b(20\d{2})\b/);
+                if (y) return y[1] + "-" + String(i + 1).padStart(2, "0") + "-01";
+            }
+        }
+        m = s.match(/^(\d{4})\/(\d{1,2})$/);
+        if (m) return m[1] + "-" + String(+m[2]).padStart(2, "0") + "-01";
+        const d = new Date(s);
+        if (!isNaN(d)) return toISODate(d);
+        return "";
     }
 
-    // إعدادات مشتركة لخط الرسوم البيانية (عربي / Cairo)
+    function toMonthKey(v) {
+        const iso = toISODate(v);
+        return iso ? iso.slice(0, 7) : "";
+    }
+
+    function findCol(headers, patterns) {
+        const normHeaders = headers.map(normText);
+        const normPatterns = patterns.map(normText).filter(Boolean);
+        for (const p of normPatterns) {
+            const exact = normHeaders.indexOf(p);
+            if (exact >= 0) return exact;
+        }
+        for (let i = 0; i < normHeaders.length; i++) {
+            const h = normHeaders[i];
+            if (!h) continue;
+            for (const p of normPatterns) {
+                if (h.includes(p)) return i;
+            }
+        }
+        return -1;
+    }
+
+    function parseSheetRows(sheet, workbook) {
+        let rows = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: true, defval: null });
+        if (!rows || !rows.length) return [];
+        let headerIdx = 0;
+        for (let i = 0; i < Math.min(6, rows.length); i++) {
+            const joined = (rows[i] || []).map(cellStr).join(" ");
+            if (/موظف|employee|اسم|المعرف|id/i.test(joined)) { headerIdx = i; break; }
+        }
+        const headers = (rows[headerIdx] || []).map(cellStr);
+        const cName = findCol(headers, ["الموظف", "اسم الموظف", "employee name", "employee", "الاسم", "name"]);
+        const cId = findCol(headers, ["المعرف", "الرقم", "id", "emp"]);
+        const cDept = findCol(headers, ["القسم", "department", "dept"]);
+        const cType = findCol(headers, ["نوع", "النوع", "type", "order type", "الامر", "الأمر"]);
+        const cDate = findCol(headers, ["التاريخ", "date"]);
+        const cMonth = findCol(headers, ["الشهر", "month", "period", "الفترة", "تاريخ التقييم", "evaluation date"]);
+        const cScore = findCol(headers, ["الدرجة المحققة", "الدرجة", "score", "النتيجة", "result"]);
+        const cMax = findCol(headers, ["العظمى", "الحد الاعلى", "max", "total", "الإجمالي", "الاجمالي"]);
+        const cPct = findCol(headers, ["النسبة", "percent", "percentage", "نسبة"]);
+        const cGrade = findCol(headers, ["التقدير", "grade", "الصفة", "المستوى"]);
+        const cNotes = findCol(headers, ["ملاحظة", "ملاحظات", "note", "comment"]);
+
+        const out = [];
+        for (let r = headerIdx + 1; r < rows.length; r++) {
+            const row = rows[r];
+            if (!row || row.every(c => c == null || c === "")) continue;
+            const rawType = cType >= 0 ? cellStr(row[cType]) : "";
+            const score = cScore >= 0 ? parseFloat(String(row[cScore]).replace(/[^\d.]/g, "")) : NaN;
+            const pct = cPct >= 0 ? parseFloat(String(row[cPct]).replace(/[^\d.%]/g, "").replace("%", "")) : NaN;
+            const hasEval = !isNaN(score) || !isNaN(pct) || (cScore >= 0 && cMonth >= 0 && rawType === "");
+            const dateVal = cDate >= 0 ? row[cDate] : null;
+            const monthVal = cMonth >= 0 ? row[cMonth] : null;
+            const orderTypes = ["تجديد عقد", "اجازة", "إجازة", "انهاء خدمة", "إنهاء خدمة", "اخرى", "أخرى"];
+            const isOrderRow = rawType && orderTypes.some(t => normText(rawType).includes(normText(t.split(" ")[0]))) && !hasEval;
+
+            if (isOrderRow) {
+                const iso = toISODate(dateVal || monthVal);
+                if (!iso) continue;
+                let type = rawType;
+                const nt = normText(rawType);
+                if (nt.includes("تجديد")) type = "تجديد عقد";
+                else if (nt.includes("اجازه") || nt.includes("إجازه") || nt.includes("اجازة")) type = "إجازة";
+                else if (nt.includes("انهاء") || nt.includes("إنهاء") || nt.includes("فسخ")) type = "إنهاء خدمة";
+                else type = "أخرى";
+                const empId = resolveEmpId(cId >= 0 ? cellStr(row[cId]) : "", cName >= 0 ? cellStr(row[cName]) : "");
+                if (!empId) continue;
+                out.push({ kind: "order", empId, type, date: iso });
+            } else if (hasEval) {
+                const rawDate = monthVal != null && monthVal !== "" ? monthVal : dateVal;
+                const monthKey = toMonthKey(rawDate);
+                if (!monthKey) continue;
+                const max = !isNaN(cMax >= 0 ? parseFloat(String(row[cMax]).replace(/[^\d.]/g, "")) : NaN) ? parseFloat(String(row[cMax]).replace(/[^\d.]/g, "")) : null;
+                let percentage = !isNaN(pct) ? pct : null;
+                if (percentage == null && !isNaN(score) && max) percentage = Math.round((score / max) * 1000) / 10;
+                const empId = resolveEmpId(cId >= 0 ? cellStr(row[cId]) : "", cName >= 0 ? cellStr(row[cName]) : "");
+                if (!empId) continue;
+                out.push({
+                    kind: "eval",
+                    empId,
+                    month: monthKey,
+                    date: toISODate(rawDate) || (monthKey + "-01"),
+                    score: !isNaN(score) ? score : null,
+                    max: max,
+                    percentage: percentage,
+                    grade: cGrade >= 0 ? cellStr(row[cGrade]) : "",
+                    notes: cNotes >= 0 ? cellStr(row[cNotes]) : "",
+                    dept: cDept >= 0 ? cellStr(row[cDept]) : ""
+                });
+            }
+        }
+        return out;
+    }
+
+    function ingestWorkbook(workbook, sourceLabel) {
+        EMP_KEY_INDEX = buildEmpKeyIndex();
+        const all = [];
+        workbook.SheetNames.forEach(name => {
+            const sheet = workbook.Sheets[name];
+            try { parseSheetRows(sheet, workbook).forEach(x => all.push(x)); } catch (e) { console.warn("ورقة", name, e); }
+        });
+        const seen = new Set();
+        excelOrders = [];
+        excelEvals = [];
+        all.forEach(x => {
+            if (x.kind === "order") {
+                const k = x.empId + "|order|" + x.type + "|" + x.date;
+                if (seen.has(k)) return;
+                seen.add(k);
+                excelOrders.push({ empId: x.empId, type: x.type, date: x.date, src: "Excel" });
+            } else {
+                const k = x.empId + "|eval|" + x.month;
+                if (seen.has(k)) return;
+                seen.add(k);
+                excelEvals.push(x);
+            }
+        });
+        excelInfo = {
+            ok: true,
+            source: sourceLabel,
+            lastUpdate: new Date().toLocaleString("ar-AE"),
+            rows: excelOrders.length + excelEvals.length,
+            error: ""
+        };
+        saveExcelCache();
+        renderExcelStatus();
+        renderAll();
+    }
+
+    async function fetchExcel(silent) {
+        const statusBox = document.getElementById("excelStatus");
+        const custom = localStorage.getItem("valencia_excel_source");
+        const sources = custom ? [custom, ...EXCEL_SOURCES] : EXCEL_SOURCES;
+        if (!silent && statusBox) statusBox.className = "excel-status", statusBox.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جارٍ التحميل...';
+        for (const url of sources) {
+            try {
+                const res = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now(), { cache: "no-store" });
+                if (!res.ok) continue;
+                const buf = await res.arrayBuffer();
+                const workbook = XLSX.read(buf, { type: "array", cellDates: true });
+                ingestWorkbook(workbook, url);
+                return true;
+            } catch (e) { /* جرّب الرابط التالي */ }
+        }
+        excelInfo = { ...excelInfo, ok: false, lastUpdate: new Date().toLocaleString("ar-AE"), error: "لم يتم العثور على الملف بعد. ارفع الملف باسم ev.xlsx إلى موقع GitHub Pages أو اختره من الجهاز." };
+        renderExcelStatus();
+        if (!silent) return false;
+        return false;
+    }
+
+    function renderExcelStatus() {
+        const box = document.getElementById("excelStatus");
+        if (!box) return;
+        if (excelInfo.ok) {
+            box.className = "excel-status";
+            box.innerHTML = `<i class="fas fa-circle-check" style="color:#27ae60;"></i>
+                <b>تم التحميل بنجاح من:</b> ${excelInfo.source}
+                <span style="color:#6c757d;">(${excelInfo.rows} سجل | آخر تحديث: ${excelInfo.lastUpdate})</span>
+                <span style="color:#6c757d;">أوامر: ${excelOrders.length} | تقييمات: ${excelEvals.length}</span>`;
+        } else {
+            box.className = "excel-status err";
+            box.innerHTML = `<i class="fas fa-triangle-exclamation" style="color:#c23d2b;"></i>
+                <span>${excelInfo.error || "لم يتم تحميل ملف Excel بعد."}</span>
+                <span style="color:#6c757d;">(${excelInfo.rows || 0} سجل محفوظ محلياً)</span>`;
+        }
+        const input = document.getElementById("excelSourceUrl");
+        if (input && !input.value) input.value = localStorage.getItem("valencia_excel_source") || EXCEL_SOURCES[0];
+    }
+
+    function exportExcelTemplate() {
+        const wb = XLSX.utils.book_new();
+        const orders = [
+            ["المعرف", "الموظف", "القسم", "نوع الأمر", "التاريخ"],
+            ["SHJ-52", "حمزة نذير عنطوز", "المبيعات", "تجديد عقد", "2026-09-15"],
+            ["SHJ-6", "تنفير انور محمد انور", "المشاريع", "إجازة", "2026-09-20"]
+        ];
+        const evals = [
+            ["المعرف", "الموظف", "القسم", "الشهر", "الدرجة", "الدرجة العظمى", "النسبة", "التقدير"],
+            ["SHJ-52", "حمزة نذير عنطوز", "المبيعات", "2026-09", 88, 100, 88, "ممتاز"],
+            ["SHJ-6", "تنفير انور محمد انور", "المشاريع", "2026-09", 75, 100, 75, "جيد جداً"]
+        ];
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(orders), "أوامر");
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(evals), "التقييمات");
+        XLSX.writeFile(wb, "ev.xlsx");
+    }
+
+    // ---------------- دمج مصادر الأوامر ----------------
+    function allOrders() {
+        const map = new Map();
+        hrOrders.forEach(o => map.set(o.empId + "|" + o.type + "|" + o.date, { empId: o.empId, type: o.type, date: o.date, src: "النظام" }));
+        excelOrders.forEach(o => {
+            const k = o.empId + "|" + o.type + "|" + o.date;
+            if (!map.has(k)) map.set(k, { empId: o.empId, type: o.type, date: o.date, src: "Excel" });
+        });
+        return Array.from(map.values());
+    }
+
+    function empById(id) { return employees.find(e => e.id === id); }
+
+    function empLabel(id) {
+        const e = empById(id);
+        return e ? e.name : id;
+    }
+
+    function empDeptLabel(id) {
+        const e = empById(id);
+        return e ? (DEPT_LABELS[e.dept] || e.dept) : "—";
+    }
+
+    function daysBetween(dateStr) {
+        const target = new Date(dateStr);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        target.setHours(0, 0, 0, 0);
+        return Math.round((target - today) / (1000 * 60 * 60 * 24));
+    }
+
     function chartDefaultFont() {
         return { family: "'Cairo', sans-serif", size: 12 };
     }
 
-    const DEPT_LABELS = {
-        sales: "المبيعات",
-        warehouse: "المستودعات",
-        vehicles: "الآليات",
-        finance: "المالية",
-        marketing: "التسويق",
-        projects: "المشاريع"
-    };
+    // ---------------- نطاقات وأفترة ----------------
+    function computeRange(period, refISO) {
+        const ref = new Date(refISO); ref.setHours(0, 0, 0, 0);
+        if (isNaN(ref)) return null;
+        if (period === "day") {
+            const end = new Date(ref); end.setDate(end.getDate() + 1);
+            return { start: ref, end };
+        }
+        if (period === "week") {
+            const end = new Date(ref); end.setDate(end.getDate() + 1);
+            const start = new Date(ref); start.setDate(start.getDate() - 6);
+            return { start, end };
+        }
+        if (period === "month") {
+            return { start: new Date(ref.getFullYear(), ref.getMonth(), 1), end: new Date(ref.getFullYear(), ref.getMonth() + 1, 1) };
+        }
+        return { start: new Date(ref.getFullYear(), 0, 1), end: new Date(ref.getFullYear() + 1, 0, 1) };
+    }
 
-    // رسم الرسوم البيانية العامة (توزيع الأنواع + الأقسام)
-    function renderGlobalCharts() {
-        if (typeof Chart === "undefined") return;
+    function buildBuckets(period, refISO) {
+        const ref = new Date(refISO); ref.setHours(0, 0, 0, 0);
+        const out = [];
+        if (period === "day") {
+            out.push({ label: WEEK_AR[ref.getDay()] + " " + ref.getDate(), key: isoDay(ref), start: new Date(ref), end: new Date(ref.getTime() + 864e5) });
+            return out;
+        }
+        if (period === "week") {
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(ref); d.setDate(d.getDate() - i);
+                out.push({ label: WEEK_AR[d.getDay()], key: isoDay(d), start: new Date(d), end: new Date(d.getTime() + 864e5) });
+            }
+            return out;
+        }
+        if (period === "month") {
+            const y = ref.getFullYear(), m = ref.getMonth();
+            const dim = new Date(y, m + 1, 0).getDate();
+            for (let d = 1; d <= dim; d++) {
+                const dd = new Date(y, m, d);
+                out.push({ label: String(d), key: isoDay(dd), start: new Date(dd), end: new Date(dd.getTime() + 864e5) });
+            }
+            return out;
+        }
+        const y = ref.getFullYear();
+        for (let m = 0; m < 12; m++) {
+            out.push({ label: MONTHS_AR[m], key: y + "-" + String(m + 1).padStart(2, "0"), start: new Date(y, m, 1), end: new Date(y, m + 1, 1) });
+        }
+        return out;
+    }
 
-        // 1) توزيع الأوامر حسب النوع (إجمالي)
-        const typeCounts = {
-            "تجديد عقد": hrOrders.filter(o=>o.type==="تجديد عقد").length,
-            "إجازة": hrOrders.filter(o=>o.type==="إجازة").length,
-            "إنهاء خدمة": hrOrders.filter(o=>o.type==="إنهاء خدمة").length,
-            "أخرى": hrOrders.filter(o=>o.type==="أخرى").length
+    function isoDay(d) {
+        return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+
+    function inRange(iso, range) {
+        if (!iso) return false;
+        const t = new Date(iso); t.setHours(0, 0, 0, 0);
+        return t >= range.start && t < range.end;
+    }
+
+    // ---------------- الحالة العامة للشركة ----------------
+    function computeCompanyHealth() {
+        const today = new Date(); today.setHours(0, 0, 0, 0);
+        let expired = 0, due30 = 0, ok = 0, unknown = 0;
+        employees.forEach(e => {
+            if (!e.contractEnd) { unknown++; return; }
+            const d = daysBetween(e.contractEnd);
+            if (d < 0) expired++;
+            else if (d <= 30) due30++;
+            else ok++;
+        });
+        const totalEmp = employees.length;
+        const contractsScore = totalEmp ? Math.round(((ok + unknown * 0.5) / totalEmp) * 100) : 100;
+
+        const orders30 = allOrders().filter(o => {
+            const d = new Date(o.date);
+            const diff = (today - new Date(d.getFullYear(), d.getMonth(), d.getDate())) / 864e5;
+            return diff <= 30 && diff >= -30;
+        });
+        const termCount = orders30.filter(o => o.type === "إنهاء خدمة").length;
+        const termScore = Math.max(0, 100 - termCount * 12);
+
+        const evals90 = excelEvals.filter(e => {
+            const d = new Date(e.month + "-15");
+            return Math.abs((today - d) / 864e5) <= 120;
+        });
+        const avgEval = evals90.length ? Math.round(evals90.reduce((s, e) => s + (e.percentage != null ? e.percentage : 0), 0) / evals90.length) : null;
+        const evalScore = avgEval != null ? Math.max(0, Math.min(100, avgEval)) : 70;
+
+        const overdueMaint = maintenances.filter(m => m.status !== "تم الصيانة" && daysBetween(m.date) < 0).length;
+        const maintScore = Math.max(0, 100 - overdueMaint * 20);
+
+        const recentActive = allOrders().filter(o => {
+            const d = new Date(o.date);
+            return Math.abs((today - new Date(d.getFullYear(), d.getMonth(), d.getDate())) / 864e5) <= 30;
+        }).length;
+        const adminScore = Math.min(100, recentActive * 10 + 40);
+
+        const total = Math.round(contractsScore * 0.3 + termScore * 0.2 + evalScore * 0.3 + maintScore * 0.1 + adminScore * 0.1);
+        return {
+            total, expired, due30, ok, unknown, totalEmp, avgEval, overdueMaint, recentActive,
+            parts: [
+                { label: "سلامة العقود", value: contractsScore, icon: "fa-file-contract", note: `${ok} سارية | ${due30} تقارب الانتهاء | ${expired} منتهية` },
+                { label: "انخفاض إنهاء الخدمة", value: termScore, icon: "fa-user-minus", note: `${termCount} أمر إنهاء خلال 30 يوماً` },
+                { label: "متوسط التقييمات", value: evalScore, icon: "fa-star", note: avgEval != null ? `${avgEval}% متوسط ${evals90.length} تقييم` : "لا توجد تقييمات حديثة في Excel" },
+                { label: "صيانة الآليات", value: maintScore, icon: "fa-truck", note: overdueMaint ? `${overdueMaint} صيانة متأخرة` : "لا توجد صيانات متأخرة" },
+                { label: "النشاط الإداري", value: adminScore, icon: "fa-bolt", note: `${recentActive} أمر خلال 30 يوماً` }
+            ]
         };
+    }
 
-        const ctx1 = document.getElementById("globalTypesChart");
-        if (globalTypesChart) globalTypesChart.destroy();
-        globalTypesChart = new Chart(ctx1, {
+    function healthLabel(v) {
+        if (v >= 85) return { text: "ممتاز", color: "#27ae60" };
+        if (v >= 70) return { text: "جيد", color: "#2b7e3a" };
+        if (v >= 50) return { text: "يحتاج انتباهاً", color: "#c47b2e" };
+        return { text: "حرج – تدخل فوري", color: "#c23d2b" };
+    }
+
+    function renderCompanyHealth() {
+        const h = computeCompanyHealth();
+        const lbl = healthLabel(h.total);
+        document.getElementById("healthAsOf").textContent = "الوضع حتى: " + new Date().toLocaleDateString("ar-AE");
+        document.getElementById("healthValue").textContent = h.total + "%";
+        document.getElementById("healthValue").style.color = lbl.color;
+
+        document.getElementById("companyStatusCards").innerHTML = `
+            <div class="stat-card"><i class="fas fa-users"></i><h4>إجمالي الموظفين</h4><div class="value">${h.totalEmp}</div></div>
+            <div class="stat-card"><i class="fas fa-file-contract"></i><h4>عقود سارية</h4><div class="value" style="color:#2b7e3a;">${h.ok}</div></div>
+            <div class="stat-card"><i class="fas fa-hourglass-half"></i><h4>تنتهي خلال 30 يوم</h4><div class="value" style="color:#c47b2e;">${h.due30}</div></div>
+            <div class="stat-card"><i class="fas fa-user-slash"></i><h4>عقود منتهية</h4><div class="value" style="color:#c23d2b;">${h.expired}</div></div>
+            <div class="stat-card"><i class="fas fa-star"></i><h4>متوسط التقييم</h4><div class="value">${h.avgEval != null ? h.avgEval + "%" : "—"}</div></div>
+            <div class="stat-card"><i class="fas fa-heartbeat"></i><h4>حالة الشركة</h4><div class="value" style="color:${lbl.color}; font-size:24px;">${lbl.text}</div></div>
+        `;
+
+        document.getElementById("healthComponents").innerHTML = h.parts.map(p => `
+            <div class="health-row">
+                <div class="hr-top"><span><i class="fas ${p.icon}"></i> ${p.label}</span><span>${p.value}%</span></div>
+                <div class="health-bar"><span style="width:${p.value}%; background:${p.value >= 70 ? 'linear-gradient(90deg,#2b7e3a,#4caf50)' : p.value >= 50 ? 'linear-gradient(90deg,#c47b2e,#e0a84a)' : 'linear-gradient(90deg,#c23d2b,#e05a4b)'};"></span></div>
+                <div class="mini-note" style="margin-top:6px;">${p.note}</div>
+            </div>
+        `).join("");
+
+        const ctx = document.getElementById("healthGauge");
+        if (healthGaugeChart) healthGaugeChart.destroy();
+        healthGaugeChart = new Chart(ctx, {
             type: "doughnut",
             data: {
-                labels: Object.keys(typeCounts),
+                labels: ["الحالة", "المتبقي"],
                 datasets: [{
-                    data: Object.values(typeCounts),
-                    backgroundColor: ["#2b7e3a", "#c47b2e", "#c23d2b", "#6c757d"],
-                    borderWidth: 2,
-                    borderColor: "#fff"
+                    data: [h.total, 100 - h.total],
+                    backgroundColor: [lbl.color, "#e6e9ef"],
+                    borderWidth: 0
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: { position: "bottom", labels: { font: chartDefaultFont() } }
+                cutout: "75%",
+                plugins: { legend: { display: false }, tooltip: { enabled: false } }
+            }
+        });
+    }
+
+    // ---------------- إحصائيات الموظفين ----------------
+    function getSelectedEmpId() {
+        return document.getElementById("statsEmployee").value;
+    }
+
+    function renderStats() {
+        const period = currentPeriod;
+        const refISO = document.getElementById("statsRefDate").value || isoDay(new Date());
+        const range = computeRange(period, refISO);
+        const buckets = buildBuckets(period, refISO);
+        const empId = getSelectedEmpId();
+        const isAll = empId === "__ALL__";
+        const orders = allOrders();
+        const empOrders = orders.filter(o => inRange(o.date, range) && (isAll || o.empId === empId));
+        const empEvals = excelEvals.filter(e => (isAll || e.empId === empId) && overlapsMonth(e.month, range));
+
+        // بطاقات الملخص
+        const renew = empOrders.filter(o => o.type === "تجديد عقد").length;
+        const leave = empOrders.filter(o => o.type === "إجازة").length;
+        const term = empOrders.filter(o => o.type === "إنهاء خدمة").length;
+        const other = empOrders.filter(o => o.type === "أخرى").length;
+        const avgEval = empEvals.length ? Math.round(empEvals.reduce((s, e) => s + (e.percentage || 0), 0) / empEvals.length) : null;
+        const emp = isAll ? null : empById(empId);
+        const lastEval = empEvals.slice().sort((a, b) => b.month.localeCompare(a.month))[0];
+        const periodLabel = { day: "اليوم", week: "الأسبوع", month: "الشهر", year: "السنة" }[period];
+
+        document.getElementById("empSummaryCards").innerHTML = `
+            <div class="emp-card"><h5>الموظف</h5><div class="v" style="font-size:15px;">${isAll ? "الشركة كلكم" : (emp ? emp.name : "—")}</div></div>
+            <div class="emp-card"><h5>أوامر ${periodLabel}</h5><div class="v">${empOrders.length}</div></div>
+            <div class="emp-card"><h5>تجديد عقد</h5><div class="v" style="color:#2b7e3a;">${renew}</div></div>
+            <div class="emp-card"><h5>إجازات</h5><div class="v" style="color:#c47b2e;">${leave}</div></div>
+            <div class="emp-card"><h5>إنهاء خدمة</h5><div class="v" style="color:#c23d2b;">${term}</div></div>
+            <div class="emp-card"><h5>أخرى</h5><div class="v" style="color:#6c757d;">${other}</div></div>
+            <div class="emp-card"><h5>متوسط التقييم</h5><div class="v">${avgEval != null ? avgEval + "%" : "—"}</div></div>
+            <div class="emp-card"><h5>آخر تقييم</h5><div class="v" style="font-size:16px;">${lastEval ? MONTHS_AR[+lastEval.month.slice(5) - 1] + " " + lastEval.month.slice(0, 4) : "—"}</div></div>
+        `;
+
+        // مخطط الأوامر حسب الفترة
+        const typeSeries = {
+            "تجديد عقد": buckets.map(b => empOrders.filter(o => o.type === "تجديد عقد" && inBucket(o.date, b, period)).length),
+            "إجازة": buckets.map(b => empOrders.filter(o => o.type === "إجازة" && inBucket(o.date, b, period)).length),
+            "إنهاء خدمة": buckets.map(b => empOrders.filter(o => o.type === "إنهاء خدمة" && inBucket(o.date, b, period)).length),
+            "أخرى": buckets.map(b => empOrders.filter(o => o.type === "أخرى" && inBucket(o.date, b, period)).length)
+        };
+        document.getElementById("empBarTitle").textContent = isAll
+            ? `أوامر الشركة خلال ${periodLabel}`
+            : `أوامر ${emp ? emp.name : ""} خلال ${periodLabel}`;
+
+        if (statsEmpBar) statsEmpBar.destroy();
+        statsEmpBar = new Chart(document.getElementById("statsEmpBar"), {
+            type: "bar",
+            data: {
+                labels: buckets.map(b => b.label),
+                datasets: [
+                    { label: "تجديد عقد", data: typeSeries["تجديد عقد"], backgroundColor: "#2b7e3a", stack: "s", borderRadius: 6 },
+                    { label: "إجازة", data: typeSeries["إجازة"], backgroundColor: "#c47b2e", stack: "s", borderRadius: 6 },
+                    { label: "إنهاء خدمة", data: typeSeries["إنهاء خدمة"], backgroundColor: "#c23d2b", stack: "s", borderRadius: 6 },
+                    { label: "أخرى", data: typeSeries["أخرى"], backgroundColor: "#6c757d", stack: "s", borderRadius: 6 }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: "bottom", labels: { font: chartDefaultFont() } } },
+                scales: {
+                    x: { stacked: true, ticks: { font: chartDefaultFont(), autoSkip: period !== "month" } },
+                    y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1, font: chartDefaultFont() } }
                 }
             }
         });
 
-        // 2) عدد الأوامر حسب القسم
-        const deptOrderCounts = {};
-        Object.keys(DEPT_LABELS).forEach(d => deptOrderCounts[d] = 0);
-        hrOrders.forEach(o => {
-            const emp = employees.find(e => e.id === o.empId);
-            if (emp && deptOrderCounts.hasOwnProperty(emp.dept)) deptOrderCounts[emp.dept]++;
+        if (statsEmpDoughnut) statsEmpDoughnut.destroy();
+        statsEmpDoughnut = new Chart(document.getElementById("statsEmpDoughnut"), {
+            type: "doughnut",
+            data: {
+                labels: ["تجديد عقد", "إجازة", "إنهاء خدمة", "أخرى"],
+                datasets: [{ data: [renew, leave, term, other], backgroundColor: ["#2b7e3a", "#c47b2e", "#c23d2b", "#6c757d"], borderWidth: 2, borderColor: "#fff" }]
+            },
+            options: { responsive: true, plugins: { legend: { position: "bottom", labels: { font: chartDefaultFont() } } } }
         });
 
-        const ctx2 = document.getElementById("deptOrdersChart");
-        if (deptOrdersChart) deptOrdersChart.destroy();
-        deptOrdersChart = new Chart(ctx2, {
+        // مخطط التقييم
+        const evalBuckets = buildEvalBuckets(period, refISO, empEvals);
+        document.getElementById("empEvalTitle").textContent = isAll
+            ? "متوسط التقييم الشهري للشركة (من ملف Excel)"
+            : `تطور تقييم ${emp ? emp.name : ""} (من ملف Excel)`;
+        if (statsEmpEval) statsEmpEval.destroy();
+        statsEmpEval = new Chart(document.getElementById("statsEmpEval"), {
+            type: "line",
+            data: {
+                labels: evalBuckets.map(b => b.label),
+                datasets: [{
+                    label: "النسبة %",
+                    data: evalBuckets.map(b => b.value),
+                    borderColor: "#c8902d",
+                    backgroundColor: "rgba(200,144,45,0.15)",
+                    fill: true,
+                    tension: 0.35,
+                    spanGaps: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { font: chartDefaultFont() } },
+                    y: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%", font: chartDefaultFont() } }
+                }
+            }
+        });
+
+        // ترتيب أعلى 10
+        const rank = computeRanking(range);
+        if (statsRank) statsRank.destroy();
+        statsRank = new Chart(document.getElementById("statsRank"), {
             type: "bar",
             data: {
-                labels: Object.keys(deptOrderCounts).map(d => DEPT_LABELS[d]),
+                labels: rank.map(r => r.name),
                 datasets: [{
-                    label: "عدد الأوامر",
-                    data: Object.values(deptOrderCounts),
-                    backgroundColor: "#c8902d",
-                    borderRadius: 8
+                    label: "متوسط التقييم %",
+                    data: rank.map(r => r.avg),
+                    backgroundColor: rank.map(r => r.avg >= 85 ? "#2b7e3a" : r.avg >= 70 ? "#c8902d" : "#c23d2b"),
+                    borderRadius: 6
                 }]
+            },
+            options: {
+                indexAxis: "y",
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%", font: chartDefaultFont() } },
+                    y: { ticks: { font: { family: "'Cairo', sans-serif", size: 11 } } }
+                }
+            }
+        });
+
+        // الأوامر حسب القسم للفترة
+        const deptCounts = {};
+        Object.keys(DEPT_LABELS).forEach(d => deptCounts[d] = 0);
+        empOrders.forEach(o => {
+            const e = empById(o.empId);
+            if (e && deptCounts.hasOwnProperty(e.dept)) deptCounts[e.dept]++;
+        });
+        if (statsDeptPeriod) statsDeptPeriod.destroy();
+        statsDeptPeriod = new Chart(document.getElementById("statsDeptPeriod"), {
+            type: "bar",
+            data: {
+                labels: Object.keys(deptCounts).map(d => DEPT_LABELS[d]),
+                datasets: [{ label: "عدد الأوامر", data: Object.values(deptCounts), backgroundColor: "#3a5fa0", borderRadius: 8 }]
             },
             options: {
                 responsive: true,
@@ -812,35 +1607,183 @@
             }
         });
 
-        // 3) عدد الموظفين حسب القسم
-        const deptEmpCounts = {};
-        Object.keys(DEPT_LABELS).forEach(d => deptEmpCounts[d] = 0);
-        employees.forEach(e => { if (deptEmpCounts.hasOwnProperty(e.dept)) deptEmpCounts[e.dept]++; });
-
-        const ctx3 = document.getElementById("deptEmployeesChart");
-        if (deptEmployeesChart) deptEmployeesChart.destroy();
-        deptEmployeesChart = new Chart(ctx3, {
-            type: "pie",
+        // متوسط التقييم الشهري للشركة (12 شهراً حتى التاريخ المرجعي)
+        const coMonths = companyMonthlyEval(refISO);
+        if (statsCompanyEval) statsCompanyEval.destroy();
+        statsCompanyEval = new Chart(document.getElementById("statsCompanyEval"), {
+            type: "line",
             data: {
-                labels: Object.keys(deptEmpCounts).map(d => DEPT_LABELS[d]),
+                labels: coMonths.map(m => m.label),
                 datasets: [{
-                    data: Object.values(deptEmpCounts),
-                    backgroundColor: ["#1e2a3a", "#c8902d", "#2b7e3a", "#c23d2b", "#6c757d", "#4a6fa5"],
-                    borderWidth: 2,
-                    borderColor: "#fff"
+                    label: "متوسط الشركة %",
+                    data: coMonths.map(m => m.value),
+                    borderColor: "#1e2a3a",
+                    backgroundColor: "rgba(30,42,58,0.1)",
+                    fill: true,
+                    tension: 0.35,
+                    spanGaps: true
                 }]
             },
             options: {
                 responsive: true,
-                plugins: { legend: { position: "bottom", labels: { font: chartDefaultFont() } } }
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { font: chartDefaultFont() } },
+                    y: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%", font: chartDefaultFont() } }
+                }
             }
+        });
+
+        // جدول أحداث الفترة
+        const tbody = document.querySelector("#empEventsTable tbody");
+        const evLines = [];
+        empOrders.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 40).forEach(o => {
+            evLines.push(`<tr><td><span class="badge ${o.type === "تجديد عقد" ? "badge-renew" : o.type === "إجازة" ? "badge-leave" : o.type === "إنهاء خدمة" ? "badge-termination" : "badge-other"}">${o.type}</span></td><td>${empLabel(o.empId)} – ${empDeptLabel(o.empId)}</td><td>${o.date}</td><td>${o.src}</td></tr>`);
+        });
+        empEvals.slice().sort((a, b) => b.month.localeCompare(a.month)).slice(0, 20).forEach(e => {
+            evLines.push(`<tr><td><span class="badge badge-other">تقييم</span></td><td>${empLabel(e.empId)} – ${e.percentage != null ? e.percentage + "%" : (e.score != null ? e.score : "")} ${e.grade ? "– " + e.grade : ""}</td><td>${e.month}</td><td>Excel</td></tr>`);
+        });
+        tbody.innerHTML = evLines.length ? evLines.join("") : `<tr><td colspan="4">لا توجد بيانات في الفترة المحددة</td></tr>`;
+    }
+
+    function inBucket(dateISO, bucket, period) {
+        if (!dateISO) return false;
+        if (period === "year") return dateISO.slice(0, 7) === bucket.key;
+        return dateISO === bucket.key;
+    }
+
+    function overlapsMonth(monthKey, range) {
+        const d = new Date(monthKey + "-15"); d.setHours(0, 0, 0, 0);
+        return d >= new Date(range.start.getTime() - 31 * 864e5) && d <= new Date(range.end.getTime() + 31 * 864e5);
+    }
+
+    function buildEvalBuckets(period, refISO, evals) {
+        const buckets = [];
+        if (period === "year") {
+            buildBuckets("year", refISO).forEach(b => {
+                const vals = evals.filter(e => e.month === b.key).map(e => e.percentage).filter(v => v != null);
+                buckets.push({ label: b.label, value: vals.length ? Math.round(vals.reduce((s, v) => s + v, 0) / vals.length) : null });
+            });
+            return buckets;
+        }
+        buildBuckets(period, refISO).forEach(b => {
+            const vals = evals.filter(e => {
+                const d = e.date || (e.month + "-01");
+                return inBucket(d, b, "day") || (period !== "day" && e.month === b.key);
+            }).map(e => e.percentage).filter(v => v != null);
+            buckets.push({ label: b.label, value: vals.length ? Math.round(vals.reduce((s, v) => s + v, 0) / vals.length) : null });
+        });
+        return buckets;
+    }
+
+    function companyMonthlyEval(refISO) {
+        const ref = new Date(refISO);
+        const out = [];
+        for (let i = 11; i >= 0; i--) {
+            const d = new Date(ref.getFullYear(), ref.getMonth() - i, 1);
+            const key = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0");
+            const vals = excelEvals.filter(e => e.month === key).map(e => e.percentage).filter(v => v != null);
+            out.push({
+                label: MONTHS_AR[d.getMonth()],
+                value: vals.length ? Math.round(vals.reduce((s, v) => s + v, 0) / vals.length) : null
+            });
+        }
+        return out;
+    }
+
+    function computeRanking(range) {
+        const byEmp = {};
+        excelEvals.filter(e => overlapsMonth(e.month, range) && e.percentage != null).forEach(e => {
+            (byEmp[e.empId] = byEmp[e.empId] || []).push(e.percentage);
+        });
+        let rank = Object.keys(byEmp).map(id => ({
+            id,
+            name: empLabel(id),
+            avg: Math.round(byEmp[id].reduce((s, v) => s + v, 0) / byEmp[id].length)
+        }));
+        if (!rank.length) {
+            const counts = {};
+            allOrders().filter(o => inRange(o.date, range)).forEach(o => counts[o.empId] = (counts[o.empId] || 0) + 1);
+            rank = Object.keys(counts).map(id => ({ id, name: empLabel(id), avg: Math.min(100, counts[id] * 20) }));
+        }
+        return rank.sort((a, b) => b.avg - a.avg).slice(0, 10);
+    }
+
+    // ---------------- العرض العام ----------------
+    function renderGlobalStats() {
+        const orders = allOrders();
+        const total = orders.length;
+        const renew = orders.filter(o=>o.type==="تجديد عقد").length;
+        const leave = orders.filter(o=>o.type==="إجازة").length;
+        const term = orders.filter(o=>o.type==="إنهاء خدمة").length;
+        const other = orders.filter(o=>o.type==="أخرى").length;
+        document.getElementById("globalStats").innerHTML = `
+            <div class="stat-card"><i class="fas fa-list"></i><h4>إجمالي الأوامر</h4><div class="value">${total}</div></div>
+            <div class="stat-card"><i class="fas fa-file-signature"></i><h4>تجديد عقود</h4><div class="value">${renew}</div></div>
+            <div class="stat-card"><i class="fas fa-umbrella-beach"></i><h4>إجازات</h4><div class="value">${leave}</div></div>
+            <div class="stat-card"><i class="fas fa-user-slash"></i><h4>إنهاء خدمة</h4><div class="value">${term}</div></div>
+            <div class="stat-card"><i class="fas fa-ellipsis-h"></i><h4>أوامر أخرى</h4><div class="value">${other}</div></div>
+            <div class="stat-card"><i class="fas fa-file-excel"></i><h4>تقييمات Excel</h4><div class="value">${excelEvals.length}</div></div>
+        `;
+    }
+
+    function renderGlobalCharts() {
+        if (typeof Chart === "undefined") return;
+        const orders = allOrders();
+        const typeCounts = {
+            "تجديد عقد": orders.filter(o=>o.type==="تجديد عقد").length,
+            "إجازة": orders.filter(o=>o.type==="إجازة").length,
+            "إنهاء خدمة": orders.filter(o=>o.type==="إنهاء خدمة").length,
+            "أخرى": orders.filter(o=>o.type==="أخرى").length
+        };
+        if (globalTypesChart) globalTypesChart.destroy();
+        globalTypesChart = new Chart(document.getElementById("globalTypesChart"), {
+            type: "doughnut",
+            data: {
+                labels: Object.keys(typeCounts),
+                datasets: [{ data: Object.values(typeCounts), backgroundColor: ["#2b7e3a", "#c47b2e", "#c23d2b", "#6c757d"], borderWidth: 2, borderColor: "#fff" }]
+            },
+            options: { responsive: true, plugins: { legend: { position: "bottom", labels: { font: chartDefaultFont() } } } }
+        });
+
+        const deptOrderCounts = {};
+        Object.keys(DEPT_LABELS).forEach(d => deptOrderCounts[d] = 0);
+        orders.forEach(o => {
+            const emp = empById(o.empId);
+            if (emp && deptOrderCounts.hasOwnProperty(emp.dept)) deptOrderCounts[emp.dept]++;
+        });
+        if (deptOrdersChart) deptOrdersChart.destroy();
+        deptOrdersChart = new Chart(document.getElementById("deptOrdersChart"), {
+            type: "bar",
+            data: {
+                labels: Object.keys(deptOrderCounts).map(d => DEPT_LABELS[d]),
+                datasets: [{ label: "عدد الأوامر", data: Object.values(deptOrderCounts), backgroundColor: "#c8902d", borderRadius: 8 }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { x: { ticks: { font: chartDefaultFont() } }, y: { beginAtZero: true, ticks: { stepSize: 1, font: chartDefaultFont() } } }
+            }
+        });
+
+        const deptEmpCounts = {};
+        Object.keys(DEPT_LABELS).forEach(d => deptEmpCounts[d] = 0);
+        employees.forEach(e => { if (deptEmpCounts.hasOwnProperty(e.dept)) deptEmpCounts[e.dept]++; });
+        if (deptEmployeesChart) deptEmployeesChart.destroy();
+        deptEmployeesChart = new Chart(document.getElementById("deptEmployeesChart"), {
+            type: "pie",
+            data: {
+                labels: Object.keys(deptEmpCounts).map(d => DEPT_LABELS[d]),
+                datasets: [{ data: Object.values(deptEmpCounts), backgroundColor: ["#1e2a3a", "#c8902d", "#2b7e3a", "#c23d2b", "#6c757d", "#4a6fa5", "#9c27b0"], borderWidth: 2, borderColor: "#fff" }]
+            },
+            options: { responsive: true, plugins: { legend: { position: "bottom", labels: { font: chartDefaultFont() } } } }
         });
     }
 
     function renderMonthlyReport() {
         const month = parseInt(document.getElementById("monthSelect").value);
         const year = parseInt(document.getElementById("yearSelect").value);
-        const filtered = hrOrders.filter(o => {
+        const filtered = allOrders().filter(o => {
             const d = new Date(o.date);
             return d.getFullYear() === year && (d.getMonth()+1) === month;
         });
@@ -857,7 +1800,7 @@
         const tbody = document.querySelector("#monthlyOrdersTable tbody");
         tbody.innerHTML = "";
         filtered.forEach(order => {
-            const emp = employees.find(e=>e.id === order.empId);
+            const emp = empById(order.empId);
             if(emp) {
                 let badgeClass = "badge-other";
                 if(order.type === "تجديد عقد") badgeClass = "badge-renew";
@@ -868,36 +1811,25 @@
         });
         if(filtered.length===0) tbody.innerHTML = "<tr><td colspan='4'>لا توجد أوامر في هذا الشهر</td></tr>";
 
-        // تحديث مخطط الشهر
         if (typeof Chart !== "undefined") {
-            const ctxM = document.getElementById("monthlyChart");
             if (monthlyChart) monthlyChart.destroy();
-            monthlyChart = new Chart(ctxM, {
+            monthlyChart = new Chart(document.getElementById("monthlyChart"), {
                 type: "bar",
                 data: {
                     labels: ["تجديد عقد", "إجازة", "إنهاء خدمة", "أخرى"],
-                    datasets: [{
-                        label: "عدد الأوامر",
-                        data: [renew, leave, term, other],
-                        backgroundColor: ["#2b7e3a", "#c47b2e", "#c23d2b", "#6c757d"],
-                        borderRadius: 8
-                    }]
+                    datasets: [{ label: "عدد الأوامر", data: [renew, leave, term, other], backgroundColor: ["#2b7e3a", "#c47b2e", "#c23d2b", "#6c757d"], borderRadius: 8 }]
                 },
                 options: {
                     responsive: true,
                     plugins: { legend: { display: false } },
-                    scales: {
-                        x: { ticks: { font: chartDefaultFont() } },
-                        y: { beginAtZero: true, ticks: { stepSize: 1, font: chartDefaultFont() } }
-                    }
+                    scales: { x: { ticks: { font: chartDefaultFont() } }, y: { beginAtZero: true, ticks: { stepSize: 1, font: chartDefaultFont() } } }
                 }
             });
         }
     }
 
-    // تصنيف حالة العقد إلى شارة ملوّنة بحسب قرب تاريخ الانتهاء
     function contractBadge(contractEnd) {
-        if (!contractEnd) return `<span class="badge badge-safe">غير محدد</span>`;
+        if (!contractEnd) return `<span class="badge badge-other">غير محدد</span>`;
         const diff = daysBetween(contractEnd);
         if (diff < 0) return `<span class="badge badge-expired">منتهٍ منذ ${Math.abs(diff)} يوم</span>`;
         if (diff <= 30) return `<span class="badge badge-soon">خلال ${diff} يوم</span>`;
@@ -911,120 +1843,129 @@
         const tbody = document.querySelector("#allEmployeesTable tbody");
         tbody.innerHTML = "";
         filtered.forEach(emp => {
-            const empOrders = hrOrders.filter(o => o.empId === emp.id).sort((a,b)=> new Date(b.date)-new Date(a.date));
+            const empOrders = allOrders().filter(o => o.empId === emp.id).sort((a,b)=> new Date(b.date)-new Date(a.date));
             const last = empOrders[0];
             const lastType = last ? last.type : "—";
             const lastDate = last ? last.date : "—";
-            tbody.innerHTML += `<tr><td>${emp.id}</td><td>${emp.name}</td><td>${DEPT_LABELS[emp.dept] || emp.dept}</td><td>${emp.team}</td><td>${lastType}</td><td>${lastDate}</td><td>${contractBadge(emp.contractEnd)}</td></tr>`;
+            const evs = excelEvals.filter(e => e.empId === emp.id).sort((a,b)=> b.month.localeCompare(a.month));
+            const lastEval = evs[0] ? `${evs[0].percentage != null ? evs[0].percentage + "%" : "—"} (${evs[0].month})` : "—";
+            tbody.innerHTML += `<tr><td>${emp.id}</td><td>${emp.name}</td><td>${DEPT_LABELS[emp.dept] || emp.dept}</td><td>${emp.team}</td><td>${lastType}</td><td>${lastDate}</td><td>${contractBadge(emp.contractEnd)}</td><td>${lastEval}</td></tr>`;
         });
     }
 
     function renderMaintenanceTable() {
         let html = `<table><thead><tr><th>المركبة</th><th>السائق</th><th>تاريخ الصيانة</th><th>الحالة</th></tr></thead><tbody>`;
-        maintenances.forEach(m => { html += `<tr><td>${m.vehicle}</td><td>${m.driver}</td><td>${m.date}</td><td>${m.status}</td></tr>`; });
+        maintenances.forEach(m => {
+            const late = m.status !== "تم الصيانة" && daysBetween(m.date) < 0;
+            html += `<tr><td>${m.vehicle}</td><td>${m.driver}</td><td>${m.date}</td><td><span class="badge ${late ? "badge-expired" : m.status === "تم الصيانة" ? "badge-renew" : "badge-soon"}">${late ? "متأخرة" : m.status}</span></td></tr>`;
+        });
         html += `</tbody></table>`;
         document.getElementById("maintenanceTableContainer").innerHTML = html;
     }
 
     function addMaintenance(vehicle, driver, date) {
-        maintenances.push({ vehicle, driver, date, status: "تم التسجيل" });
+        maintenances.push({ vehicle, driver, date, status: "قادمة" });
         saveAllData();
         renderMaintenanceTable();
         renderSmartAlerts();
-    }
-
-    // ============================================================
-    // التنبيهات الذكية للمدير
-    // ============================================================
-
-    // فرق الأيام بين تاريخ معيّن واليوم الحالي (موجب = مستقبل، سالب = ماضٍ)
-    function daysBetween(dateStr) {
-        const target = new Date(dateStr);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        target.setHours(0, 0, 0, 0);
-        return Math.round((target - today) / (1000 * 60 * 60 * 24));
+        renderCompanyHealth();
     }
 
     function renderSmartAlerts() {
         const box = document.getElementById("smartAlertsBox");
         if (!box) return;
-
         const alerts = [];
-
-        // 1) عقود منتهية أو قاربت على الانتهاء (خلال 30 يوماً)
         employees.forEach(emp => {
             if (!emp.contractEnd) return;
             const diff = daysBetween(emp.contractEnd);
             if (diff < 0) {
-                alerts.push({
-                    level: "danger",
-                    icon: "fa-user-slash",
-                    text: `عقد الموظف <b>${emp.name}</b> (${DEPT_LABELS[emp.dept] || emp.dept}) منتهٍ منذ <b>${Math.abs(diff)}</b> يوم بتاريخ ${emp.contractEnd}. يجب اتخاذ إجراء فوري (تجديد أو إنهاء خدمة).`
-                });
+                alerts.push({ level: "danger", icon: "fa-user-slash", text: `عقد الموظف <b>${emp.name}</b> (${DEPT_LABELS[emp.dept] || emp.dept}) منتهٍ منذ <b>${Math.abs(diff)}</b> يوم بتاريخ ${emp.contractEnd}. يجب اتخاذ إجراء فوري (تجديد أو إنهاء خدمة).` });
             } else if (diff <= 30) {
-                alerts.push({
-                    level: "warning",
-                    icon: "fa-hourglass-half",
-                    text: `عقد الموظف <b>${emp.name}</b> (${DEPT_LABELS[emp.dept] || emp.dept}) سينتهي خلال <b>${diff}</b> يوم (${emp.contractEnd}). يُنصح بالمباشرة بإجراءات التجديد.`
-                });
+                alerts.push({ level: "warning", icon: "fa-hourglass-half", text: `عقد الموظف <b>${emp.name}</b> (${DEPT_LABELS[emp.dept] || emp.dept}) سينتهي خلال <b>${diff}</b> يوم (${emp.contractEnd}). يُنصح بالمباشرة بإجراءات التجديد.` });
             }
         });
-
-        // 2) أوامر إنهاء خدمة مجدولة خلال الأيام القادمة
-        hrOrders.forEach(o => {
+        allOrders().forEach(o => {
             if (o.type === "إنهاء خدمة") {
                 const diff = daysBetween(o.date);
                 if (diff >= 0 && diff <= 15) {
-                    const emp = employees.find(e => e.id === o.empId);
-                    if (emp) {
-                        alerts.push({
-                            level: "danger",
-                            icon: "fa-exclamation-triangle",
-                            text: `أمر إنهاء خدمة للموظف <b>${emp.name}</b> مجدول بتاريخ ${o.date} (خلال <b>${diff}</b> يوم). يرجى التأكد من استكمال إجراءات التسوية.`
-                        });
-                    }
+                    alerts.push({ level: "danger", icon: "fa-exclamation-triangle", text: `أمر إنهاء خدمة للموظف <b>${empLabel(o.empId)}</b> مجدول بتاريخ ${o.date} (خلال <b>${diff}</b> يوم). يرجى التأكد من استكمال إجراءات التسوية.` });
                 }
             }
         });
-
-        // 3) صيانة آليات متأخرة أو قادمة قريباً
         maintenances.forEach(m => {
-            if (m.status === "قادمة") {
+            if (m.status !== "تم الصيانة") {
                 const diff = daysBetween(m.date);
                 if (diff < 0) {
-                    alerts.push({
-                        level: "danger",
-                        icon: "fa-truck",
-                        text: `صيانة "<b>${m.vehicle}</b>" (السائق: ${m.driver}) متأخرة منذ <b>${Math.abs(diff)}</b> يوم عن الموعد المحدد (${m.date}).`
-                    });
+                    alerts.push({ level: "danger", icon: "fa-truck", text: `صيانة "<b>${m.vehicle}</b>" (السائق: ${m.driver}) متأخرة منذ <b>${Math.abs(diff)}</b> يوم عن الموعد المحدد (${m.date}).` });
                 } else if (diff <= 7) {
-                    alerts.push({
-                        level: "warning",
-                        icon: "fa-truck-loading",
-                        text: `موعد صيانة "<b>${m.vehicle}</b>" (السائق: ${m.driver}) خلال <b>${diff}</b> يوم (${m.date}).`
-                    });
+                    alerts.push({ level: "warning", icon: "fa-truck-loading", text: `موعد صيانة "<b>${m.vehicle}</b>" (السائق: ${m.driver}) خلال <b>${diff}</b> يوم (${m.date}).` });
                 }
             }
+        });
+        const lowEval = {};
+        excelEvals.forEach(e => {
+            if (e.percentage != null && e.percentage < 60) lowEval[e.empId] = e;
+        });
+        Object.keys(lowEval).slice(0, 5).forEach(id => {
+            const e = lowEval[id];
+            alerts.push({ level: "warning", icon: "fa-star-half-stroke", text: `تقييم منخفض للموظف <b>${empLabel(id)}</b>: ${e.percentage}% في ${e.month}. يُنصح بمتابعة الأداء.` });
         });
 
         if (alerts.length === 0) {
             box.innerHTML = `<div class="alert-item alert-ok"><i class="fas fa-check-circle"></i><span>لا توجد تنبيهات عاجلة حالياً، كل شيء تحت السيطرة ✅</span></div>`;
             return;
         }
-
-        // ترتيب حسب الأهمية: عاجل جداً ثم تحذير
         const severityOrder = { danger: 0, warning: 1, info: 2 };
         alerts.sort((a, b) => severityOrder[a.level] - severityOrder[b.level]);
-
         box.innerHTML = alerts.map(a => `<div class="alert-item alert-${a.level}"><i class="fas ${a.icon}"></i><span>${a.text}</span></div>`).join("");
     }
 
-    // إرسال التقرير الشهري يدويًا
+    async function sendTelegramMessage(text) {
+        if (!TELEGRAM_BOT_TOKEN || TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") return false;
+        if (!TELEGRAM_CHAT_ID || TELEGRAM_CHAT_ID === "YOUR_CHAT_ID_HERE") return false;
+        const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: text, parse_mode: "HTML" })
+            });
+            const res = await response.json();
+            if(res.ok) {
+                document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fab fa-telegram"></i> ✅ تم إرسال الإشعار إلى التليجرام بنجاح`;
+                setTimeout(()=>{ document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fab fa-telegram"></i> <span>سيتم إرسال إشعار تلقائي إلى قناة التليجرام عند إضافة أمر جديد</span>`; }, 4000);
+                return true;
+            } else throw new Error(res.description);
+        } catch(e) {
+            document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fas fa-times-circle"></i> ❌ فشل الإرسال: ${e.message}`;
+            return false;
+        }
+    }
+
+    function buildNewOrderMessage(empName, orderType, orderDate, dept) {
+        let emoji = "📋";
+        if(orderType === "تجديد عقد") emoji = "✅";
+        else if(orderType === "إجازة") emoji = "🏖️";
+        else if(orderType === "إنهاء خدمة") emoji = "⚠️";
+        return `📢 *إشعار جديد - نظام موارد بشرية فالنسيا*\n${emoji} *نوع الأمر:* ${orderType}\n👤 *الموظف:* ${empName}\n🏢 *القسم:* ${dept}\n📅 *التاريخ:* ${orderDate}\n🔔 تم تسجيل الأمر بنجاح في النظام.`;
+    }
+
+    async function addOrderWithNotification(empId, type, date) {
+        if(!empId || !date) { alert("اختر موظفاً وتاريخاً"); return false; }
+        const employee = empById(empId);
+        if(!employee) return false;
+        hrOrders.push({ empId, type, date });
+        saveAllData();
+        renderAll();
+        const msg = buildNewOrderMessage(employee.name, type, date, DEPT_LABELS[employee.dept] || employee.dept);
+        await sendTelegramMessage(msg);
+        return true;
+    }
+
     async function sendMonthlyReport() {
         const month = document.getElementById("monthSelect").value;
         const year = document.getElementById("yearSelect").value;
-        const filtered = hrOrders.filter(o => { const d = new Date(o.date); return d.getFullYear() == year && (d.getMonth()+1) == month; });
+        const filtered = allOrders().filter(o => { const d = new Date(o.date); return d.getFullYear() == year && (d.getMonth()+1) == month; });
         const renew = filtered.filter(o=>o.type==="تجديد عقد").length;
         const leave = filtered.filter(o=>o.type==="إجازة").length;
         const term = filtered.filter(o=>o.type==="إنهاء خدمة").length;
@@ -1033,15 +1974,34 @@
         await sendTelegramMessage(lines);
     }
 
-    // طباعة التقرير كـ PDF
-    function printReport() {
-        window.print();
+    function populateEmployeeSelects() {
+        const statsSel = document.getElementById("statsEmployee");
+        const addSel = document.getElementById("newOrderEmpId");
+        const sorted = employees.slice().sort((a, b) => a.name.localeCompare(b.name, "ar"));
+        statsSel.innerHTML = `<option value="__ALL__">🏢 الشركة كلكم</option>` +
+            sorted.map(e => `<option value="${e.id}">${e.name} (${DEPT_LABELS[e.dept] || e.dept})</option>`).join("");
+        addSel.innerHTML = "<option value=''>-- اختر موظف --</option>" +
+            sorted.map(e => `<option value="${e.id}">${e.name} (${DEPT_LABELS[e.dept] || e.dept})</option>`).join("");
+        const lastId = localStorage.getItem("valencia_stats_emp");
+        if (lastId && (lastId === "__ALL__" || employees.find(e => e.id === lastId))) statsSel.value = lastId;
     }
 
-    // ربط الأحداث
+    function renderAll() {
+        renderGlobalStats();
+        renderGlobalCharts();
+        renderMonthlyReport();
+        renderAllEmployees();
+        renderMaintenanceTable();
+        renderSmartAlerts();
+        renderCompanyHealth();
+        populateEmployeeSelects();
+        renderStats();
+    }
+
+    // ---------------- ربط الأحداث ----------------
     document.getElementById("applyMonthFilterBtn").onclick = () => renderMonthlyReport();
     document.getElementById("sendReportToTelegramBtn").onclick = () => sendMonthlyReport();
-    document.getElementById("printReportBtn").onclick = () => printReport();
+    document.getElementById("printReportBtn").onclick = () => window.print();
     document.getElementById("addOrderBtn").onclick = async () => {
         const empId = document.getElementById("newOrderEmpId").value;
         const type = document.getElementById("newOrderType").value;
@@ -1059,25 +2019,54 @@
     document.getElementById("searchEmployee").addEventListener("input", renderAllEmployees);
     document.getElementById("deptFilterEmployees").addEventListener("change", renderAllEmployees);
 
-    function populateEmployeeSelect() {
-        const select = document.getElementById("newOrderEmpId");
-        select.innerHTML = "<option value=''>-- اختر موظف --</option>";
-        employees.forEach(emp => { select.innerHTML += `<option value="${emp.id}">${emp.name} (${DEPT_LABELS[emp.dept] || emp.dept})</option>`; });
-    }
+    document.querySelectorAll("#periodTabs button").forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll("#periodTabs button").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentPeriod = btn.dataset.period;
+            renderStats();
+        };
+    });
+    document.getElementById("statsRefDate").addEventListener("change", renderStats);
+    document.getElementById("statsEmployee").addEventListener("change", () => {
+        localStorage.setItem("valencia_stats_emp", document.getElementById("statsEmployee").value);
+        renderStats();
+    });
+    document.getElementById("refreshExcelBtn").onclick = () => {
+        const url = document.getElementById("excelSourceUrl").value.trim();
+        if (url) localStorage.setItem("valencia_excel_source", url);
+        fetchExcel(false);
+    };
+    document.getElementById("refreshExcelBtn2").onclick = () => {
+        fetchExcel(false).then(() => renderAll());
+    };
+    document.getElementById("excelTemplateBtn").onclick = exportExcelTemplate;
+    document.getElementById("excelFileInput").addEventListener("change", ev => {
+        const file = ev.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            try {
+                const workbook = XLSX.read(e.target.result, { type: "array", cellDates: true });
+                ingestWorkbook(workbook, "ملف محلي: " + file.name);
+                renderAll();
+            } catch (err) { alert("تعذر قراءة الملف: " + err.message); }
+        };
+        reader.readAsArrayBuffer(file);
+    });
 
     window.onload = () => {
         loadAllData();
-        populateEmployeeSelect();
-        renderGlobalStats();
-        renderGlobalCharts();
-        renderMonthlyReport();
-        renderAllEmployees();
-        renderMaintenanceTable();
-        renderSmartAlerts();
+        document.getElementById("statsRefDate").value = isoDay(new Date());
+        document.getElementById("newOrderDate").value = isoDay(new Date());
+        populateEmployeeSelects();
+        const cached = loadExcelCache();
+        renderExcelStatus();
+        renderAll();
         saveAllData();
-        if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") {
-            document.getElementById("telegramNotifyStatus").innerHTML = `<i class="fas fa-cog"></i> ⚙️ لم يتم تكوين توكن التليجرام بعد. الرجاء إدخال البيانات الحقيقية في الكود (متغيرات TELEGRAM_BOT_TOKEN و TELEGRAM_CHAT_ID)`;
-        }
+        fetchExcel(true).then(() => renderAll());
+        setInterval(() => { fetchExcel(true).then(() => renderAll()); }, 15 * 60 * 1000);
+        if (!cached) { /* لا شيء */ }
     };
 </script>
 </body>
